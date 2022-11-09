@@ -16,7 +16,7 @@ const PostCreation = () => {
                     </label>
                     <input type="file" id="file" style={{display:"none"}}></input>
                 </div>
-                <button type='button'>Share</button>
+                <button type='button' className='btn btn-primary postButton'>Post</button>
             </div>
         </div>
     );

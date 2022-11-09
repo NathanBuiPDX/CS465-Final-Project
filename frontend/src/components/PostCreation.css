@@ -61,3 +61,8 @@
     text-decoration: underline;
     font-weight: bold;
 }
+
+.postCreation .postButton {
+    padding: 5px 30px;
+    font-weight: bold;
+}

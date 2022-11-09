@@ -1,18 +1,11 @@
 import Home from "./pages/Home";
-
+import InfoProvider from "./components/InfoProvider";
 function App() {
-<<<<<<< Updated upstream
-  return (
-    <div className="App">
-      <p>Hello World and Test</p>
-    </div>
-  );
-=======
   return  (
-  <div> 
-    <Home/>
-  </div>)
->>>>>>> Stashed changes
+    <InfoProvider> 
+      <Home/>
+    </InfoProvider>
+  );
 }
 
 export default App;
