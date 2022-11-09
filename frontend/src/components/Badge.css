@@ -1,0 +1,28 @@
+.userBagde {
+    display: flex;
+    flex-direction: row;
+    width: 200px;
+    align-items: center;
+}
+.userBagde .userIcon {
+    box-sizing: content-box;
+    display: block;
+    height: 32px;
+    width: 32px;
+    margin-right: 5px;
+    border-radius: 50%;
+}
+
+.userBagde .userName {
+    color: white;
+    font-weight: bold;
+}
+.userBagde .userName:hover {
+    text-decoration:underline;
+}
+.userBagde:hover {
+    cursor: pointer;
+}
+.userBagde .userIcon:hover {
+    border: solid 1px white;
+}

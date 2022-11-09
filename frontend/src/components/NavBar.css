@@ -1,0 +1,46 @@
+.navBarContainer {
+    display: flex;
+    position: sticky;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    width: 100%;
+    top: 0;
+}
+
+.navBarContainer .navBarLeft {
+    margin-left: 10px;
+    padding-bottom: 3px;
+}
+
+.navBarContainer .navBarLogo {
+    font-weight: bold;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.navBarContainer .navBarCenter {
+    height: 35px;
+    width: 500px;
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.navBarContainer .searchIcon {
+    margin-left: 10px;
+    font-size: 30px;
+}
+.navBarContainer .searchInput {
+    margin-left: 10px;
+    border:none;
+    width: 85%;
+    height: 30px;
+    align-items: center;
+}
+.navBarContainer .searchInput:focus {
+    outline: none;
+}
