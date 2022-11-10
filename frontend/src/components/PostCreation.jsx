@@ -28,7 +28,6 @@ const PostCreation = () => {
                 <label htmlFor="caption"><img src={currentUser.icon_url} alt={`${currentUser.icon_url} from PostCreation`} className='userIcon'/></label>
                 <textarea type="text" placeholder='Share your thoughts here' ref={content} id="caption" className='caption'/>
             </div>
-            <hr />
             <div className='uploadFile'>
                 <div>
                     <label htmlFor="file" className="photoSharing">

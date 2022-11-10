@@ -22,6 +22,9 @@
 }
 
 .navBarContainer .navBarCenter {
+    position: fixed;
+    top: 7px;
+    right: calc(50% - 250px);
     height: 35px;
     width: 500px;
     background-color: white;
@@ -43,4 +46,9 @@
 }
 .navBarContainer .searchInput:focus {
     outline: none;
+}
+
+.navBarContainer .widthAdjustment{
+    width:90%;
+    z-index: 1000000;
 }

@@ -7,17 +7,27 @@ import { InfoContext } from './InfoProvider';
 
 const NavBar = () => {
     const context = useContext(InfoContext);
-    //MOCK DATA
     const user = context.currentUser;
+    const recentlySearch = context.recentlySearch;
+
+    const handleSearchClick = (event, userID) => {
+        event.preventDefault();
+        console.log("userID: ", userID);
+    }
+
     return (
         <div className="navBarContainer bg-primary">
             <div className="navBarLeft">
                 <div className="navBarLogo">Social App</div>
             </div>
             <div className="navBarCenter">
-                <label htmlFor="search"><Search alt="searchIcon" className="searchIcon" />
-                </label>
-                <input type="search" id="search" placeholder='Find your friend here' className='searchInput'/>
+                <label htmlFor="search"><Search alt="searchIcon" className="searchIcon" /></label>
+                <div class="dropdown widthAdjustment">
+                    <input type="text" id="search" placeholder='Find your friend here' className='searchInput' data-bs-toggle="dropdown" aria-expanded="false"/>
+                    <ul class="dropdown-menu mt-2 widthAdjustment bg-light">
+                        {recentlySearch.map(e => <li class="dropdown-item" value={e.id} key={e.id} onClick={(event) => handleSearchClick(event, e.id)}><UserFigure user={e} color={"black"}/></li>)}
+                    </ul>
+                </div>
             </div>
             <div className="navBarRight d-flex">
                 <UserFigure user={user}/>

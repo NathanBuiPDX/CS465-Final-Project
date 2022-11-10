@@ -38,6 +38,9 @@
 .postCreation .uploadFile {
     display: flex;
     justify-content: space-around;
+    border-top: 1px solid rgba(181, 180, 180, 0.484);
+    margin-top: 10px;
+    padding-top: 10px;
 }
 
 .postCreation .photoSharing {

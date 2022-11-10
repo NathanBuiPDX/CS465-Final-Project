@@ -23,11 +23,15 @@
 
 .post .postBottom {
     padding: 0 10px;
+}
+
+.post .commentLikeCount {
     display: flex;
     flex-direction: row;
-    margin-bottom: 10px;
-    margin-right:10px;
     justify-content:space-between;
+    border-top: 1px solid rgba(181, 180, 180, 0.484);
+    margin: 10px 10px 10px 0;
+    padding: 10px 0;
 }
 
 .post .likeIcon {
