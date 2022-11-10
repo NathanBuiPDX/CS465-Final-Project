@@ -1,4 +1,5 @@
 .navBarContainer {
+    box-sizing: content-box;
     display: flex;
     position: sticky;
     flex-direction: row;
@@ -7,6 +8,9 @@
     height: 50px;
     width: 100%;
     top: 0;
+    z-index: 1;
+    border-top: 2px solid rgba(255, 255, 255, 0.253);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.253);
 }
 
 .navBarContainer .navBarLeft {
@@ -16,9 +20,13 @@
 
 .navBarContainer .navBarLogo {
     font-weight: bold;
-    color: white;
+    color: rgb(237, 237, 237);
     font-size: 24px;
     cursor: pointer;
+}
+
+.navBarContainer .navBarLogo:hover {
+    font-size: 26px;
 }
 
 .navBarContainer .navBarCenter {
@@ -51,4 +59,7 @@
 .navBarContainer .widthAdjustment{
     width:90%;
     z-index: 1000000;
+}
+.navBarContainer .dropdown-item:hover {
+    color: black !important;
 }

@@ -16,22 +16,22 @@ const NavBar = () => {
     }
 
     return (
-        <div className="navBarContainer bg-primary">
+        <div className="navBarContainer bg-dark">
             <div className="navBarLeft">
                 <div className="navBarLogo">Social App</div>
             </div>
             <div className="navBarCenter">
                 <label htmlFor="search"><Search alt="searchIcon" className="searchIcon" /></label>
-                <div class="dropdown widthAdjustment">
+                <div className="dropdown widthAdjustment">
                     <input type="text" id="search" placeholder='Find your friend here' className='searchInput' data-bs-toggle="dropdown" aria-expanded="false"/>
-                    <ul class="dropdown-menu mt-2 widthAdjustment bg-light">
-                        {recentlySearch.map(e => <li class="dropdown-item" value={e.id} key={e.id} onClick={(event) => handleSearchClick(event, e.id)}><UserFigure user={e} color={"black"}/></li>)}
+                    <ul className="dropdown-menu mt-2 widthAdjustment bg-light">
+                        {recentlySearch.map(e => <li className="dropdown-item" value={e.id} key={e.id} onClick={(event) => handleSearchClick(event, e.id)}><UserFigure user={e} color={"black"}/></li>)}
                     </ul>
                 </div>
             </div>
             <div className="navBarRight d-flex">
                 <UserFigure user={user}/>
-                <button type='button' className='mx-3 btn btn-primary'>Logout</button>
+                <button type='button' className='mx-3 btn btn-dark'><b>Logout</b></button>
             </div>
         </div>
     );

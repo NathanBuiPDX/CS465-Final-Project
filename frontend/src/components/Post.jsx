@@ -1,12 +1,11 @@
-import React from 'react';
+import React, {Fragment, useEffect, useState, useContext} from 'react';
 import './Post.css';
 import Bagde from './Badge';
-import { useContext } from 'react';
 import { InfoContext } from './InfoProvider';
-import { useState } from 'react';
 import { ThumbUp } from '@material-ui/icons';
 import Comment from './Comment';
-
+import { MoreHoriz } from '@material-ui/icons';
+import CommentCreation from './CommentCreation';
 const Post = ({post}) => {
     const context = useContext(InfoContext);
 
@@ -15,6 +14,11 @@ const Post = ({post}) => {
     let [comments, setComments] = useState([]);
     let [viewComment, setViewComment] = useState(false);
     const currentUser = context.currentUser;
+
+    useEffect(() => {
+        let comments = context.comments.filter(comment => comment.post_id === post.id);
+        setComments(comments);
+    },[]);
 
     const handleLikeClick = (event) => {
         event.preventDefault();
@@ -34,12 +38,26 @@ const Post = ({post}) => {
         console.log("Post Deleted!");
     }
 
+    const handleSubmitComment = (data) => {
+        let newComment = {
+            //id must be created automatically
+            id: "10",
+            post_id: post.id,
+            user_id: currentUser.id,
+            text: data,
+        }
+        console.log("POST DATA RECIVED: ", newComment);
+        setComments(prevComments => [newComment, ...prevComments]);
+    }
+
     return (
         <div className='post bg-light'>
             <div className="postTop d-flex justify-content-between">
                 <Bagde post={post}/>
-                {post.user_id === currentUser.id && <div class="dropdown">
-                    <button className="btn btn-light dropdown-toggle rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false"/>
+                {post.user_id === currentUser.id && <div className="dropdown">
+                    <button className="btn btn-light" alt='dropdown' type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                       <MoreHoriz/>
+                    </button>
                     <ul className="dropdown-menu">
                         <li className="dropdown-item" onClick={handleUpdatePost}>Update Post</li>
                         <li className="dropdown-item" onClick={handleDeletePost}>Delete Post</li>
@@ -59,8 +77,14 @@ const Post = ({post}) => {
                     <div>
                         {post.comments_count > 0 && <div className='pt-1 commentCount' onClick={() => setViewComment(prevState => !prevState)}>{post.comments_count} Comments</div>}
                     </div>
+                    
                 </div>
-                        {viewComment && <Comment comments={comments}/>}
+                        {viewComment && 
+                        <Fragment>
+                            <CommentCreation submitComment={handleSubmitComment}/>
+                            {comments.map(comment => <Comment key={comment.id} comment={comment}/>)}
+                        </Fragment>
+                        }
             </div>
         </div>
     );

@@ -31,7 +31,7 @@ const PostCreation = () => {
             <div className='uploadFile'>
                 <div>
                     <label htmlFor="file" className="photoSharing">
-                        <Photo className='photoIcon' for="file"/><span className='iconLabel'>Photo/Image</span>
+                        <Photo className='photoIcon' htmlFor="file"/><span className='iconLabel'>Photo/Image</span>
                     </label>
                     <input type="file" id="file" style={{display:"none"}} onChange={handleImageUpload}/>
                 </div>
