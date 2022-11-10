@@ -1,13 +1,25 @@
 import React, { useState } from 'react';
-import {Users} from  '../mockdata';
+import {Users, Posts, Comments} from  '../mockdata';
 
 export const InfoContext = React.createContext();
 
 
 const InfoProvider = ({children}) => {
+    //MOCKDATA
+    const [likes, setLikes] = useState([]);
+    const [posts, setPosts] = useState([...Posts]);
+    const [comments, setComments] = useState([...Comments]);
     const [users, setUser] = useState([...Users]);
-    const [currentUser, setCurrentUser] = useState({});
-    const [recentlySearch, setRecentlySearch] = useState([]);
+    const [currentUser, setCurrentUser] = useState({
+        id: "1",
+        name: "nathan",
+        full_name: "nathan bui",
+        icon_url: "/assets/1.png",
+        gender: "male",
+        dob: "22/03/2000",
+        about: "love doing stuff"
+    });
+    const [recentlySearch, setRecentlySearch] = useState([...Users]);
 
     const addRecentlySearch = (newSearch) => {
         setRecentlySearch(currentArraySearch => {
@@ -25,8 +37,13 @@ const InfoProvider = ({children}) => {
     return (
         <InfoContext.Provider
             value = {{
-                addRecentlySearch : addRecentlySearch,
                 users: users,
+                currentUser: currentUser,
+                likes: likes,
+                posts:posts,
+                comments: comments,
+                recentlySearch: recentlySearch,
+                addRecentlySearch : addRecentlySearch,
                 setCurrentUser : addCurrentUser
             }}
         >

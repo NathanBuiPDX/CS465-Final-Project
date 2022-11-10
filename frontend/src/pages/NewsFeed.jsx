@@ -1,12 +1,17 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './NewsFeed.css';
 import PostCreation from '../components/PostCreation';
 import Post from '../components/Post';
+import { InfoContext } from '../components/InfoProvider';
+
 const NewsFeed = () => {
+    const context = useContext(InfoContext);
+    const posts = context.posts;
+    console.log(posts);
     return (
         <div className='newsFeed'>
             <PostCreation/>
-            <Post/>
+            {posts.map(post => <Post key={post.id} post={post}/>)}
         </div>
     );
 };
