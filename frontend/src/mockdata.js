@@ -3,16 +3,18 @@ export const Users = [
         id: "1",
         name: "nathan",
         full_name: "nathan bui",
-        icon_url: "/assets/1.png",
+        icon_url: "/assets/2.png",
         gender: "male",
         dob: "22/03/2000",
-        about: "love doing stuff"
+        about: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. \
+        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an \
+        unknown printer took a galley of type and scrambled it to make a type specimen book"
     },
     {
         id: "2",
         name: "micheal",
         full_name: "micheal kor",
-        icon_url: "/assets/2.png",
+        icon_url: "/assets/1.png",
         gender: "male",
         dob: "22/03/2000",
         about: "love doing stuff"

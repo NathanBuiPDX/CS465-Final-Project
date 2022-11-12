@@ -14,7 +14,7 @@ const InfoProvider = ({children}) => {
         id: "1",
         name: "nathan",
         full_name: "nathan bui",
-        icon_url: "/assets/1.png",
+        icon_url: "/assets/2.png",
         gender: "male",
         dob: "22/03/2000",
         about: "love doing stuff"

@@ -1,4 +1,33 @@
 .userProfile {
-    width: 80%;
+    width: 60%;
     margin: 0 auto;
+}
+.userProfile .userInfo {
+    position: sticky;
+    top: 70px;
+    border: 1px solid white;
+    margin-top: 15px;
+    border-radius: 20px;
+    height: fit-content;
+    padding: 10px 15px 20px 15px;
+}
+
+.userProfile .about {
+    text-align: center;
+    font-weight: bold;
+    font-size:larger;
+    padding: 10px;
+    border-bottom: 1.5px solid rgba(96, 95, 95, 0.372);
+    margin-bottom: 10px;
+}
+.userProfile .infoRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+.userProfile .infoLabel {
+    font-weight: bold;
+    width: 120px;
 }
