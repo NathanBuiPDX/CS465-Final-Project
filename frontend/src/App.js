@@ -18,7 +18,7 @@ function App() {
         <Router>
           <Switch>
             <Route exact path='/' component={user ? NewsFeed : null}/>
-            <Route path='user/:userID' component={UserPage}/>
+            <Route path='/user/:userID' component={UserPage}/>
           </Switch>
         </Router>
       </div>
