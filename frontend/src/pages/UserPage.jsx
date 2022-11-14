@@ -5,7 +5,6 @@ import { useState, useEffect, useContext } from 'react';
 import { InfoContext } from '../components/InfoProvider';
 import PostCreation from '../components/PostCreation';
 import Post from '../components/Post';
-import { useRadioGroup } from '@material-ui/core';
 
 const UserPage = (props) => {
     const context = useContext(InfoContext);
@@ -22,18 +21,17 @@ const UserPage = (props) => {
         setUserPosts(posts);
     }, [userID])
 
-    // {
-    //     id: "4",
-    //     name: "john",
-    //     full_name: "john snow",
-    //     icon_url: "/assets/2.png",
-    //     gender: "female",
-    //     dob: "22/03/2000",
-    //     about: "love doing stuff"
-    // }
     return (
-        <div className='userProfile'>
-            <div className="userImages">
+        <div className='userProfile bg-light'>
+            <div className="profileTop">
+                <div className="userImages">
+                    <img src="/assets/cover-1.jpg" className="coverImg" alt={`profile page user icon ${user.icon_url}`} />
+                    <img src={user.icon_url} className="profileImg" alt={`profile page user icon ${user.icon_url}`} />
+                </div>
+                <div className="userName">
+                    <p>{user.full_name}</p>
+                    <p>({user.name})</p>
+                </div>
 
             </div>
             

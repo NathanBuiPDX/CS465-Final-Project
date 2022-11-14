@@ -6,13 +6,19 @@ import { ThumbUp } from '@material-ui/icons';
 import Comment from './Comment';
 import { MoreHoriz } from '@material-ui/icons';
 import CommentCreation from './CommentCreation';
+import { useRef } from 'react';
+import $ from 'jquery';
+import 'bootstrap';
 const Post = ({post}) => {
     const context = useContext(InfoContext);
+    const updateCaption = useRef(post.caption);
+    const [file,setFile] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
+    const [like, setLike] = useState(false);
+    const [likeCount, setLikeCount] = useState(post.like_count);
+    const [comments, setComments] = useState([]);
+    const [viewComment, setViewComment] = useState(false);
 
-    let [like, setLike] = useState(false);
-    let [likeCount, setLikeCount] = useState(post.like_count);
-    let [comments, setComments] = useState([]);
-    let [viewComment, setViewComment] = useState(false);
     const currentUser = context.currentUser;
 
     useEffect(() => {
@@ -28,9 +34,25 @@ const Post = ({post}) => {
         setLikeCount(prevLikeCount => !like ? ++prevLikeCount : --prevLikeCount);
     }
 
+    const handleUpdateImage = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        try{
+            setFile(event.target.files[0]);
+            setImagePreview(URL.createObjectURL(event.target.files[0]));
+        }
+        catch(err) {
+            setFile(null);
+            setImagePreview(null);
+        }
+    }
+
     const handleUpdatePost = (event) => {
         event.preventDefault();
-        console.log("Post Updated!");
+        setTimeout(() => {
+            // get the post again
+            console.log("Post Updated!");
+        }, 2000);
     }
 
     const handleDeletePost = (event) => {
@@ -59,9 +81,35 @@ const Post = ({post}) => {
                        <MoreHoriz/>
                     </button>
                     <ul className="dropdown-menu">
-                        <li className="dropdown-item" onClick={handleUpdatePost}>Update Post</li>
+                        <li className="dropdown-item" data-bs-toggle="modal" data-bs-target="#updatePostModal" >Update Post</li>
                         <li className="dropdown-item" onClick={handleDeletePost}>Delete Post</li>
                     </ul>
+                    <div class="modal fade" id="updatePostModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updatePostModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="updatePostModalLabel">Updating Post</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div className='infoRow'>
+                                    <label htmlFor='updateContext' className='infoLabel'>Caption:</label>
+                                    <textarea id="updateContext" className='infoData' ref={updateCaption} defaultValue={post.caption}/>
+                                </div> 
+                                <div className='infoRow'>
+                                    <label htmlFor='updateImage' className='infoLabel'>Image:</label>
+                                    <input id="updateImage" type="file" onChange={handleUpdateImage}/>
+                                </div> 
+                                {!imagePreview &&  <img src={post.image_url} className="imageModal" alt='initial image post'/>}
+                                {imagePreview && <img src={imagePreview} className="imageModal" alt='preview update post'/>}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick={handleUpdatePost}>Update</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>}
             </div>
             <div className="postMiddle">

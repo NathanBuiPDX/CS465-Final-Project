@@ -8,12 +8,12 @@ function App() {
     <InfoProvider> 
       <div className='app'>
           <NavBar/>
-          <div className='feedPage'>
+          {/* <div className='feedPage'>
               <NewsFeed/>
-          </div>
-          {/* <div className='userPage'>
-              <UserPage/>
           </div> */}
+          <div className='userPage'>
+              <UserPage/>
+          </div>
       </div>
     </InfoProvider>
   );
