@@ -4,21 +4,31 @@ import {Search} from '@material-ui/icons';
 import UserFigure from './UserFigure';
 import { useContext } from 'react';
 import { InfoContext } from './InfoProvider';
+import { useHistory } from 'react-router-dom';
 
 const NavBar = () => {
+    const history = useHistory();
     const context = useContext(InfoContext);
     const user = context.currentUser;
     const recentlySearch = context.recentlySearch;
 
     const handleSearchClick = (event, userID) => {
         event.preventDefault();
-        console.log("userID: ", userID);
+        try{
+            console.log("userID: ", userID);
+            history.push(`/user/${userID}`);
+
+        }
+        catch(err) {
+            window.alert("ERROR: ", err.message);
+        }
+
     }
 
     return (
         <div className="navBarContainer bg-dark">
             <div className="navBarLeft">
-                <div className="navBarLogo">Social App</div>
+                <div className="navBarLogo" onClick={() => history.push('/')}>Social App</div>
             </div>
             <div className="navBarCenter">
                 <label htmlFor="search"><Search alt="searchIcon" className="searchIcon" /></label>

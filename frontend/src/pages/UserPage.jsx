@@ -32,7 +32,7 @@ const UserPage = (props) => {
                         <img src="/assets/cover-1.jpg" className="coverImg" alt={`profile page user icon ${user.icon_url}`} />
                         <img src={user.icon_url} className="profileImg" alt={`profile page user icon ${user.icon_url}`} />
                     </div>
-                    <div className="userName">
+                    <div className="userNameSection">
                         <p>{user.full_name}</p>
                         <p>({user.name})</p>
                     </div>
