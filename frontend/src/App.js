@@ -5,7 +5,7 @@ import UserPage from './pages/UserPage';
 import { useContext } from "react";
 import {
   BrowserRouter as Router,
-  Routes,
+  Switch,
   Route,
   Redirect,
 } from "react-router-dom";
@@ -16,10 +16,10 @@ function App() {
   return  (
       <div className='app'>
         <Router>
-          <Routes>
-            <Route exact path='/' element={user ? <NewsFeed/> : null}/>
-            <Route path='user/:userID' element={<UserPage/>}/>
-          </Routes>
+          <Switch>
+            <Route exact path='/' component={user ? NewsFeed : null}/>
+            <Route path='user/:userID' component={UserPage}/>
+          </Switch>
         </Router>
       </div>
   );
