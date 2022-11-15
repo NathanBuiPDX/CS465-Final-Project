@@ -32,3 +32,6 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+.noDisplay {
+  display: none;
+}

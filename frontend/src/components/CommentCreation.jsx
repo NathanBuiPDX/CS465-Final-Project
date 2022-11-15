@@ -18,7 +18,7 @@ const CommentCreation = (props) => {
             <img src={user.icon_url} alt={`${user.icon_url} comment created ${user.name}`} className='userIcon'/> 
             <div  className='content'>
                 <input className='inputComment' name="inputComment" placeholder='Write a comment...' id="inputComment" ref={comment}/>
-                <button type='button' className='submitIcon' onClick={handleSUbmitButtonClick}><Send/><span style={{display:"none"}}>Send</span></button>
+                <button type='button' className='submitIcon' onClick={handleSUbmitButtonClick}><Send/><span className='noDisplay'>Send</span></button>
             </div>
         </label>
     );

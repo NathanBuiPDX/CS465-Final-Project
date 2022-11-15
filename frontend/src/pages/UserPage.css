@@ -28,6 +28,7 @@
 }
 
 .userProfile .coverImg {
+    position: relative;
     display: block;
     width: inherit;
     height: 250px;
@@ -39,7 +40,7 @@
     box-sizing: content-box;
     display: block;
     position: relative;
-    bottom:80px;
+    bottom:110px;
     width: 160px;
     height: 160px;
     border-radius: 100%;
@@ -71,6 +72,22 @@
     padding: 10px 15px 20px 15px;
 }
 
+.userProfile .infoInput {
+    width: 70%;
+    border-radius: 10px;
+    border: 1.5px solid rgba(97, 96, 96, 0.445);
+    padding: 5px;
+}
+
+.userProfile .infoInputAboutMe {
+    width: 97%;
+    margin-top: 10px;
+    border-radius: 10px;
+    height: 120px;
+    border: 1.5px solid rgba(97, 96, 96, 0.445);
+    padding: 5px;
+}
+
 .userProfile .about {
     text-align: center;
     font-weight: bold;
@@ -98,3 +115,21 @@
     align-items: center;
 }
 
+.userProfile .editButton {
+    position: absolute;
+    right: 10px;
+    top:10px;
+}
+
+.userProfile .editCoverImgButton {
+    position: relative;
+    left:calc(100% - 80px);
+    bottom: 50px;
+
+}
+
+.userProfile .editProfileImgButton {
+    position: relative;
+    left:140px;
+    bottom: 180px;
+}

@@ -50,12 +50,14 @@ const Post = ({post}) => {
         event.preventDefault();
         setTimeout(() => {
             // get the post again
+            URL.revokeObjectURL(imagePreview);
             console.log("Post Updated!");
         }, 2000);
     }
 
     const handleDeletePost = (event) => {
         event.preventDefault();
+
         console.log("Post Deleted!");
     }
 
@@ -77,10 +79,10 @@ const Post = ({post}) => {
                 <Bagde post={post}/>
                 {post.user_id === currentUser.id && <div className="dropdown">
                     <button className="btn btn-light" alt='dropdown' type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                       <MoreHoriz/><span style={{display:"none"}}>Dropdown Menu</span>
+                       <MoreHoriz/><span className='noDisplay'>Dropdown Menu</span>
                     </button>
                     <ul className="dropdown-menu">
-                        <li className="dropdown-item" data-bs-toggle="modal" data-bs-target="#updatePostModal" >Update Post</li>
+                        <li className="dropdown-item" data-bs-toggle="modal" data-bs-target="#updatePostModal">Update Post</li>
                         <li className="dropdown-item" onClick={handleDeletePost}>Delete Post</li>
                     </ul>
                     <div className="modal fade" id="updatePostModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="updatePostModalLabel" aria-hidden="true">

@@ -58,7 +58,7 @@ const PostCreation = () => {
                     <label htmlFor="file" className="photoSharing">
                         <Photo className='photoIcon' htmlFor="file"/><span className='iconLabel'>Photo/Image</span>
                     </label>
-                    <input type="file" id="file" style={{display:"none"}} onChange={handleImageUpload}/>
+                    <input type="file" id="file" className='noDisplay' onChange={handleImageUpload}/>
                 </div>
                 <button type='submit' className='btn btn-primary postButton' disabled={isUpdating}>{isUpdating ? "Posting" : "Post"}</button>
             </div>
