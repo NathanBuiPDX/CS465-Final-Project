@@ -23,7 +23,7 @@ export const Users = [
         id: "3",
         name: "kelvin",
         full_name: "kelvin kim",
-        icon_url: "/assets/1.png",
+        icon_url: "/assets/3.jfif",
         gender: "female",
         dob: "22/03/2000",
         about: "love doing stuff"
@@ -32,7 +32,7 @@ export const Users = [
         id: "4",
         name: "john",
         full_name: "john snow",
-        icon_url: "/assets/2.png",
+        icon_url: "/assets/5.webp",
         gender: "female",
         dob: "22/03/2000",
         about: "love doing stuff"

@@ -11,6 +11,7 @@
     width: 40px;
     margin-right: 5px;
     border-radius: 50%;
+    object-fit:cover;
 }
 
 .userBagde .userName {
