@@ -23,7 +23,7 @@
     margin: 0;
     padding: 0;
     font-size: 12px;
-    color: gray;
+    color: rgb(77, 75, 75);
 }
 .userBagde .userName:hover {
     text-decoration:underline;

@@ -14,13 +14,13 @@ const CommentCreation = (props) => {
         comment.current.value = "";
     }
     return (
-        <div className='createComment d-flex align-items-center'>
+        <label htmlFor="inputComment" className='createComment d-flex align-items-center'>
             <img src={user.icon_url} alt={`${user.icon_url} comment created ${user.name}`} className='userIcon'/> 
-            <label htmlFor="inputComment" className='content'>
+            <div  className='content'>
                 <input className='inputComment' name="inputComment" placeholder='Write a comment...' id="inputComment" ref={comment}/>
-                <button type='button' className='submitIcon' onClick={handleSUbmitButtonClick}><Send/></button>
-            </label>
-        </div>
+                <button type='button' className='submitIcon' onClick={handleSUbmitButtonClick}><Send/><span style={{display:"none"}}>Send</span></button>
+            </div>
+        </label>
     );
 };
 

@@ -77,7 +77,7 @@ const Post = ({post}) => {
                 <Bagde post={post}/>
                 {post.user_id === currentUser.id && <div className="dropdown">
                     <button className="btn btn-light" alt='dropdown' type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                       <MoreHoriz/>
+                       <MoreHoriz/><span style={{display:"none"}}>Dropdown Menu</span>
                     </button>
                     <ul className="dropdown-menu">
                         <li className="dropdown-item" data-bs-toggle="modal" data-bs-target="#updatePostModal" >Update Post</li>
