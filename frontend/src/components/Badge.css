@@ -1,37 +1,37 @@
 .userBagde {
-    display: flex;
-    flex-direction: row;
-    width: 200px;
-    align-items: center;
+	display: flex;
+	flex-direction: row;
+	width: 200px;
+	align-items: center;
 }
 .userBagde .userIcon {
-    box-sizing: content-box;
-    display: block;
-    height: 40px;
-    width: 40px;
-    margin-right: 5px;
-    border-radius: 50%;
-    object-fit:cover;
+	box-sizing: content-box;
+	display: block;
+	height: 40px;
+	width: 40px;
+	margin-right: 5px;
+	border-radius: 50%;
+	object-fit: cover;
 }
 
 .userBagde .userName {
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
 }
 
 .userBagde .timeDuration {
-    margin: 0;
-    padding: 0;
-    font-size: 12px;
-    color: rgb(77, 75, 75);
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+	color: rgb(77, 75, 75);
 }
 .userBagde .userName:hover {
-    text-decoration:underline;
+	text-decoration: underline;
 }
 .userBagde:hover {
-    cursor: pointer;
+	cursor: pointer;
 }
 .userBagde .userIcon:hover {
-    border: solid 1px white;
+	border: solid 1px white;
 }

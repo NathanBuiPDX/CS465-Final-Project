@@ -1,65 +1,65 @@
 .navBarContainer {
-    box-sizing: content-box;
-    display: flex;
-    position: sticky;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: 50px;
-    width: 100%;
-    top: 0;
-    z-index: 1;
-    border-top: 2px solid rgba(255, 255, 255, 0.253);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.253);
+	box-sizing: content-box;
+	display: flex;
+	position: sticky;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	height: 50px;
+	width: 100%;
+	top: 0;
+	z-index: 1;
+	border-top: 2px solid rgba(255, 255, 255, 0.253);
+	border-bottom: 2px solid rgba(255, 255, 255, 0.253);
 }
 
 .navBarContainer .navBarLeft {
-    margin-left: 10px;
-    padding-bottom: 3px;
+	margin-left: 10px;
+	padding-bottom: 3px;
 }
 
 .navBarContainer .navBarLogo {
-    font-weight: bold;
-    color: rgb(237, 237, 237);
-    font-size: 24px;
-    cursor: pointer;
+	font-weight: bold;
+	color: rgb(237, 237, 237);
+	font-size: 24px;
+	cursor: pointer;
 }
 
 .navBarContainer .navBarLogo:hover {
-    font-size: 26px;
+	font-size: 26px;
 }
 
 .navBarContainer .navBarCenter {
-    position: fixed;
-    top: 7px;
-    right: calc(50% - 250px);
-    height: 35px;
-    width: 500px;
-    background-color: white;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
+	position: fixed;
+	top: 7px;
+	right: calc(50% - 250px);
+	height: 35px;
+	width: 500px;
+	background-color: white;
+	border-radius: 20px;
+	display: flex;
+	align-items: center;
 }
 
 .navBarContainer .searchIcon {
-    margin-left: 10px;
-    font-size: 30px;
+	margin-left: 10px;
+	font-size: 30px;
 }
 .navBarContainer .searchInput {
-    margin-left: 10px;
-    border:none;
-    width: 85%;
-    height: 30px;
-    align-items: center;
+	margin-left: 10px;
+	border: none;
+	width: 85%;
+	height: 30px;
+	align-items: center;
 }
 .navBarContainer .searchInput:focus {
-    outline: none;
+	outline: none;
 }
 
-.navBarContainer .widthAdjustment{
-    width:90%;
-    z-index: 1000000;
+.navBarContainer .widthAdjustment {
+	width: 90%;
+	z-index: 1000000;
 }
 .navBarContainer .dropdown-item:hover {
-    color: black !important;
+	color: black !important;
 }

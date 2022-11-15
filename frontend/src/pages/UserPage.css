@@ -133,3 +133,10 @@
     left:140px;
     bottom: 180px;
 }
+
+.userProfile .imageModal{
+    display: block;
+    width: 50%;
+    height: 50%;
+    margin: 10px auto;
+}
