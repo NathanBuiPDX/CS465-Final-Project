@@ -12,7 +12,9 @@ import { Edit, CameraAlt } from '@material-ui/icons';
 const PROFILE_IMAGE = 'Profile Image';
 const COVER_IMAGE = 'Cover Image';
 const ABOUT = 'User Information';
-
+const DEFAULT_PROFILE_IMG = process.env.REACT_APP_DEFAULT_ICON;
+const DEFAULT_COVER_IMG = process.env.REACT_APP_DEFAULT_COVER;
+console.log('DEFAULT COVER IMG: ', DEFAULT_COVER_IMG);
 const UserPage = (props) => {
 	const context = useContext(InfoContext);
 	const [userPosts, setUserPosts] = useState([]);
@@ -31,25 +33,18 @@ const UserPage = (props) => {
 	useEffect(() => {
 		let posts = context.posts.filter((post) => post.user_id === userID);
 		let user = context.users.find((user) => user.id === userID);
-		user.cover_url = '/assets/cover-1.jpg';
 		console.log('USER: ', user);
+		user.icon_url = user.icon_url ? user.icon_url : DEFAULT_PROFILE_IMG;
+		user.cover_url = user.cover_url ? user.cover_url : DEFAULT_COVER_IMG;
+
 		setUser(user);
 		setUserPosts(posts);
-	}, []);
+	}, [userID]);
 
-	// {
-    //     id: "4",
-    //     name: "john",
-    //     full_name: "john snow",
-    //     icon_url: "/assets/5.webp",
-    //     gender: "female",
-    //     dob: "22/03/2000",
-    //     about: "love doing stuff"
-    // },
 	const handleUpdateProfile = (event) => {
 		event.preventDefault();
 		event.stopPropagation();
-		let updateUser = {...user};
+		let updateUser = { ...user };
 
 		if (updateSection === ABOUT) {
 			updateUser.name = nameRef.current.value;
@@ -57,14 +52,14 @@ const UserPage = (props) => {
 			updateUser.gender = genderRef.current.value;
 			updateUser.dob = dobRef.current.value;
 			updateUser.about = aboutRef.current.value;
-			console.log("UPDATING USER INFO: ", updateUser);
+			console.log('UPDATING USER INFO: ', updateUser);
 		}
-		if(updateSection === COVER_IMAGE) {
+		if (updateSection === COVER_IMAGE) {
 			//TODO : change this to file when doing PUT
 			// updateUser.cover_url = file;
 			updateUser.cover_url = imagePreview;
 		}
-		if(updateSection === PROFILE_IMAGE) {
+		if (updateSection === PROFILE_IMAGE) {
 			//TODO : change this to file when doing PUT
 			// updateUser.image_url = file;
 			updateUser.icon_url = imagePreview;
@@ -99,6 +94,11 @@ const UserPage = (props) => {
 								className="coverImg"
 								alt={`profile page user icon ${user.icon_url}`}
 							/>
+							<img
+								src={user.icon_url}
+								className="profileImg"
+								alt={`profile page user icon ${user.icon_url}`}
+							/>
 							{userID === context.currentUser.id && (
 								<button
 									className="btn btn-light py-1 editCoverImgButton"
@@ -110,13 +110,6 @@ const UserPage = (props) => {
 									<span className="noDisplay">Edit Cover Picture</span>
 								</button>
 							)}
-						</div>
-						<div>
-							<img
-								src={user.icon_url}
-								className="profileImg"
-								alt={`profile page user icon ${user.icon_url}`}
-							/>
 							{userID === context.currentUser.id && (
 								<button
 									id="iconPicture"

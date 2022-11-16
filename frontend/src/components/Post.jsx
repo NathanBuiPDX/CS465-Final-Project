@@ -52,7 +52,7 @@ const Post = ({ post:initialPost }) => {
 
 	const handleUpdatePost = (event) => {
 		event.preventDefault();
-		let prevPost = post;
+		let prevPost = {...post};
 		setTimeout(() => {
 			// get the post again
 			let updatePost = {

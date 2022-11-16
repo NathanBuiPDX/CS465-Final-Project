@@ -3,6 +3,9 @@ import './CommentCreation.css';
 import { useContext, useState, useRef } from 'react';
 import { InfoContext } from './InfoProvider';
 import { Send } from '@material-ui/icons';
+
+const DEFAULT_PROFILE_IMG = process.env.REACT_APP_DEFAULT_ICON;
+
 const CommentCreation = (props) => {
 	const context = useContext(InfoContext);
 	const [user, setUser] = useState(context.currentUser);
@@ -19,7 +22,7 @@ const CommentCreation = (props) => {
 			className="createComment d-flex align-items-center"
 		>
 			<img
-				src={user.icon_url}
+				src={user.icon_url || DEFAULT_PROFILE_IMG}
 				alt={`${user.icon_url} comment created ${user.name}`}
 				className="userIcon"
 			/>

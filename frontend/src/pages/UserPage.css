@@ -40,7 +40,8 @@
     box-sizing: content-box;
     display: block;
     position: relative;
-    bottom:110px;
+    left: calc(50% - 90px);
+    bottom:90px;
     width: 160px;
     height: 160px;
     border-radius: 100%;
@@ -124,14 +125,14 @@
 .userProfile .editCoverImgButton {
     position: relative;
     left:calc(100% - 80px);
-    bottom: 50px;
+    bottom: 400px;
 
 }
 
 .userProfile .editProfileImgButton {
     position: relative;
-    left:140px;
-    bottom: 180px;
+    left:calc(50%);
+    bottom: 150px;
 }
 
 .userProfile .imageModal{
