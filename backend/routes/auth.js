@@ -6,7 +6,6 @@ router.post('/other', async (req, res) => {
     try {
         const cookies = fetchCookies(req);
         if (cookies["user"]) {
-            // res.clearCookie('user');
             res.status(200).json("Authorized user");
         } else {
             res.status(403).json("Unauthorized user");
@@ -14,6 +13,11 @@ router.post('/other', async (req, res) => {
     } catch (error) {
         res.status(500).json(error);
     }
+});
+
+router.get('/logout', async (req, res) => {
+    res.clearCookie('user');
+    res.status(200).json("logout");
 });
 
 router.post('/login', async (req, res) => {
