@@ -35,18 +35,42 @@ const UserPage = (props) => {
 		console.log('USER: ', user);
 		setUser(user);
 		setUserPosts(posts);
-	}, [userID]);
+	}, []);
 
+	// {
+    //     id: "4",
+    //     name: "john",
+    //     full_name: "john snow",
+    //     icon_url: "/assets/5.webp",
+    //     gender: "female",
+    //     dob: "22/03/2000",
+    //     about: "love doing stuff"
+    // },
 	const handleUpdateProfile = (event) => {
 		event.preventDefault();
 		event.stopPropagation();
+		let updateUser = {...user};
+
 		if (updateSection === ABOUT) {
-			console.log('full name: ', fullNameRef.current.value);
-			console.log('name: ', nameRef.current.value);
-			console.log('gender: ', genderRef.current.value);
-			console.log('dob: ', dobRef.current.value);
-			console.log('about: ', aboutRef.current.value);
+			updateUser.name = nameRef.current.value;
+			updateUser.full_name = fullNameRef.current.value;
+			updateUser.gender = genderRef.current.value;
+			updateUser.dob = dobRef.current.value;
+			updateUser.about = aboutRef.current.value;
+			console.log("UPDATING USER INFO: ", updateUser);
 		}
+		if(updateSection === COVER_IMAGE) {
+			//TODO : change this to file when doing PUT
+			// updateUser.cover_url = file;
+			updateUser.cover_url = imagePreview;
+		}
+		if(updateSection === PROFILE_IMAGE) {
+			//TODO : change this to file when doing PUT
+			// updateUser.image_url = file;
+			updateUser.icon_url = imagePreview;
+		}
+		setUser(updateUser);
+		setImagePreview(null);
 		console.log('Updated User Profile!');
 	};
 
@@ -115,7 +139,7 @@ const UserPage = (props) => {
 
 				<div className="userContent container">
 					<div className="row">
-						<div className="userInfo col-12-sm col-4 bg-light">
+						<div className="userInfo col-12 col-md-4 bg-light">
 							<div className="about">
 								About {user.name}
 								{userID === context.currentUser.id && (
@@ -153,7 +177,7 @@ const UserPage = (props) => {
 							</div>
 						</div>
 
-						<div className="userPost col-12-sm col-8">
+						<div className="userPost col-12 col-md-8">
 							{userID === context.currentUser.id && <PostCreation />}
 							{userPosts.map((post) => (
 								<Post key={post.id} post={post} />

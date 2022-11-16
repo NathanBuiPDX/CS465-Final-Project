@@ -8,16 +8,16 @@ import { MoreHoriz } from '@material-ui/icons';
 import CommentCreation from './CommentCreation';
 import { useRef } from 'react';
 
-const Post = ({ post }) => {
+const Post = ({ post:initialPost }) => {
 	const context = useContext(InfoContext);
-	const updateCaption = useRef(post.caption);
+	const updateCaption = useRef(initialPost.caption);
 	const [file, setFile] = useState(null);
 	const [imagePreview, setImagePreview] = useState(null);
 	const [like, setLike] = useState(false);
-	const [likeCount, setLikeCount] = useState(post.like_count);
+	const [likeCount, setLikeCount] = useState(initialPost.like_count);
 	const [comments, setComments] = useState([]);
 	const [viewComment, setViewComment] = useState(false);
-
+	const [post, setPost] = useState(initialPost);
 	const currentUser = context.currentUser;
 
 	useEffect(() => {
@@ -30,6 +30,7 @@ const Post = ({ post }) => {
 	const handleLikeClick = (event) => {
 		event.preventDefault();
 		setLike((prevState) => {
+			//check and delete/create the like object depends on the user's click
 			return !prevState;
 		});
 		setLikeCount((prevLikeCount) =>
@@ -51,9 +52,17 @@ const Post = ({ post }) => {
 
 	const handleUpdatePost = (event) => {
 		event.preventDefault();
+		let prevPost = post;
 		setTimeout(() => {
 			// get the post again
+			let updatePost = {
+				caption: updateCaption.current.value,
+				image_url: file || prevPost.image_url
+			}
+			console.log("UPDATING POST: ", updatePost);
+			setPost({...prevPost, caption: updatePost.caption, image_url: imagePreview});
 			URL.revokeObjectURL(imagePreview);
+			setImagePreview(null)
 			console.log('Post Updated!');
 		}, 2000);
 	};
