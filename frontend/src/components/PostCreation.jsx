@@ -3,7 +3,7 @@ import './PostCreation.css';
 import { Block, Photo } from '@material-ui/icons';
 import { InfoContext } from './InfoProvider';
 
-const PostCreation = () => {
+const PostCreation = ({submitPost}) => {
 	const context = useContext(InfoContext);
 	const content = useRef('');
 	const [file, setFile] = useState(null);
@@ -30,6 +30,17 @@ const PostCreation = () => {
 		console.log('Form Submitted with content: ', content.current.value);
 		setTimeout(() => {
 			try {
+				let newPost = {
+					user_id: currentUser.id,
+					post_time: new Date().toISOString(),
+					//TODO: uncomment the below line
+					// image_url:file,
+					image_url: imagePreview,
+					caption: content.current.value,
+					like_count: 0,
+					comments_count:0
+				};
+				submitPost(newPost);
 				setIsUpdating(false);
 				content.current.value = '';
 				setFile(null);
@@ -39,7 +50,7 @@ const PostCreation = () => {
 				console.log(err);
 				setIsUpdating(false);
 			}
-			URL.revokeObjectURL(imagePreview);
+			// URL.revokeObjectURL(imagePreview);
 		}, 2000);
 	};
 

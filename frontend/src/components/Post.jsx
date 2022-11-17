@@ -8,16 +8,18 @@ import { MoreHoriz } from '@material-ui/icons';
 import CommentCreation from './CommentCreation';
 import { useRef } from 'react';
 
-const Post = ({ post:initialPost }) => {
+const Post = ({ post: initialPost, deletePost }) => {
 	const context = useContext(InfoContext);
-	const updateCaption = useRef(initialPost.caption);
+	const [post, setPost] = useState(initialPost);
+	// const updateCaption = useRef(initialPost.caption);
+	const [caption, setCaption] = useState(initialPost.caption);
 	const [file, setFile] = useState(null);
 	const [imagePreview, setImagePreview] = useState(null);
 	const [like, setLike] = useState(false);
 	const [likeCount, setLikeCount] = useState(initialPost.like_count);
+	const [commentCount, setCommentCount] = useState(initialPost.comments_count);
 	const [comments, setComments] = useState([]);
 	const [viewComment, setViewComment] = useState(false);
-	const [post, setPost] = useState(initialPost);
 	const currentUser = context.currentUser;
 
 	useEffect(() => {
@@ -25,7 +27,8 @@ const Post = ({ post:initialPost }) => {
 			(comment) => comment.post_id === post.id
 		);
 		setComments(comments);
-	}, []);
+		setCaption(initialPost.caption);
+	}, [initialPost]);
 
 	const handleLikeClick = (event) => {
 		event.preventDefault();
@@ -52,39 +55,51 @@ const Post = ({ post:initialPost }) => {
 
 	const handleUpdatePost = (event) => {
 		event.preventDefault();
-		let prevPost = {...post};
+		let prevPost = { ...post };
 		setTimeout(() => {
 			// get the post again
 			let updatePost = {
-				caption: updateCaption.current.value,
-				image_url: file || prevPost.image_url
-			}
-			console.log("UPDATING POST: ", updatePost);
-			setPost({...prevPost, caption: updatePost.caption, image_url: imagePreview});
+				caption: caption,
+				image_url: file || prevPost.image_url,
+			};
+			console.log('UPDATING POST: ', updatePost);
+			setPost({
+				...prevPost,
+				caption: updatePost.caption,
+				image_url: imagePreview,
+			});
 			URL.revokeObjectURL(imagePreview);
-			setImagePreview(null)
+			setImagePreview(null);
 			console.log('Post Updated!');
 		}, 2000);
 	};
 
 	const handleDeletePost = (event) => {
 		event.preventDefault();
-
-		console.log('Post Deleted!');
+		deletePost(post.id);
 	};
 
 	const handleSubmitComment = (data) => {
-		let newComment = {
+		try {
+			let newComment = {
 			//id must be created automatically
-			id: '10',
+			id: Math.random(),
 			post_id: post.id,
 			user_id: currentUser.id,
 			text: data,
 		};
-		console.log('POST DATA RECIVED: ', newComment);
+		console.log('POST DATA RECIVED NEW COMMENT: ', newComment);
 		setComments((prevComments) => [newComment, ...prevComments]);
+		setCommentCount(prevComments => ++prevComments);
+		} catch(err) {
+			window.alert("ERROR WHEN CREATING NEW COMMENT: ", err);
+		}
 	};
 
+	const handleContentChange = (event) => {
+		event.preventDefault();
+		setCaption(event.target.value);
+	}
 	return (
 		<div className="post bg-light">
 			<div className="postTop d-flex justify-content-between">
@@ -143,8 +158,8 @@ const Post = ({ post:initialPost }) => {
 											<textarea
 												id="updateContext"
 												className="infoData"
-												ref={updateCaption}
-												defaultValue={post.caption}
+												value={caption}
+												onChange={handleContentChange}
 											/>
 										</div>
 										<div className="infoRow">
@@ -211,17 +226,19 @@ const Post = ({ post:initialPost }) => {
 						<div className="likeIcon" onClick={handleLikeClick}>
 							<ThumbUp />{' '}
 						</div>
-						{likeCount > 0 && <div className="pt-1">{likeCount} Likes</div>}
-					</div>
-					<div>
-						{post.comments_count > 0 && (
-							<div
-								className="pt-1 commentCount"
-								onClick={() => setViewComment((prevState) => !prevState)}
-							>
-								{post.comments_count} Comments
+						{likeCount > 0 && (
+							<div className="pt-1">
+								{likeCount} {likeCount > 1 ? 'Likes' : 'Like'}
 							</div>
 						)}
+					</div>
+					<div>
+						<div
+							className="pt-1 commentCount"
+							onClick={() => setViewComment((prevState) => !prevState)}
+						>
+							{commentCount} {commentCount > 1 ? ' Comments' : ' Comment'}
+						</div>
 					</div>
 				</div>
 				{viewComment && (

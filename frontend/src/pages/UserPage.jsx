@@ -31,6 +31,7 @@ const UserPage = (props) => {
 	console.log('USERID: ', userID);
 
 	useEffect(() => {
+		//TODO: call GET /posts instead of context.posts
 		let posts = context.posts.filter((post) => post.user_id === userID);
 		let user = context.users.find((user) => user.id === userID);
 		console.log('USER: ', user);
@@ -81,6 +82,32 @@ const UserPage = (props) => {
 			setImagePreview(null);
 		}
 	};
+
+	const handleCreatePost = (data) => {
+		try{
+			//TODO remove this random number
+			data.id = Math.random();
+			console.log("NewsFeed file Receiving NEW POST: ", data);
+			//call POST /post then get post again
+			// getPosts();
+			//TODO: remove this one
+			setUserPosts(prevPosts => [data,...prevPosts]);
+		} catch(err) {
+			window.alert("ERROR CREATING NEW POST PROFILE PAGE:", err);
+		}
+	}
+
+	const handleDeletePost = (postID) => {
+		try{
+			console.log("UserPage Receiving DELETED POSTID: ", postID);
+			//TODO: call delete then call getPosts() again
+			let tempPosts = [...userPosts];
+			tempPosts = tempPosts.filter(post => post.id !== postID);
+			setUserPosts(tempPosts);
+		} catch(err) {
+			window.alert("ERROR CREATING NEW POST PROFILE PAGE:", err);
+		}
+	}
 
 	return (
 		<>
@@ -171,9 +198,9 @@ const UserPage = (props) => {
 						</div>
 
 						<div className="userPost col-12 col-md-8">
-							{userID === context.currentUser.id && <PostCreation />}
+							{userID === context.currentUser.id && <PostCreation submitPost={handleCreatePost} />}
 							{userPosts.map((post) => (
-								<Post key={post.id} post={post} />
+								<Post key={post.id} post={post} deletePost={handleDeletePost} />
 							))}
 						</div>
 					</div>
