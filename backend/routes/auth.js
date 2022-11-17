@@ -23,7 +23,8 @@ router.post('/login', async (req, res) => {
             res.status(400).json(`Wrong Password!`);
             return;
         }
-        res.cookie('userId', user._id.toString(), { maxAge: 360000 });
+        // cookie set for 15 mins
+        res.cookie('userId', user._id.toString(), { maxAge: 900000 });
         // eslint-disable-next-line no-unused-vars
         const { password, createdAt, updatedAt, __v, ...other } = user._doc;
         res.status(200).json(other);
