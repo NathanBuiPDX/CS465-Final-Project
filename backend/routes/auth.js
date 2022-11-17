@@ -24,7 +24,9 @@ router.post('/login', async (req, res) => {
             return;
         }
         res.cookie('userId', user._id.toString(), { maxAge: 360000 });
-        res.status(200).json(user);
+        // eslint-disable-next-line no-unused-vars
+        const { password, createdAt, updatedAt, __v, ...other } = user._doc;
+        res.status(200).json(other);
     } catch (error) {
         res.status(500).json(error);
     }
@@ -37,7 +39,9 @@ router.post('/register', async (req, res) => {
             req.body.password = await generateHashedPwd(req.body.password);
             const newUser = new User(req.body);
             const user = await newUser.save();
-            res.status(200).json(user);
+            // eslint-disable-next-line no-unused-vars
+            const { password, createdAt, updatedAt, __v, ...other } = user._doc;
+            res.status(200).json(other);
         } else {
             res.status(400).json('Required field is empty');
         }

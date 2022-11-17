@@ -49,7 +49,9 @@ router.put('/', async (req, res) => {
             try {
                 const mongoId = cookies['userId'];
                 const user = await User.findByIdAndUpdate({ _id: mongoId }, { $set: req.body });
-                res.status(200).json(user);
+                // eslint-disable-next-line no-unused-vars
+                const { password, createdAt, updatedAt, __v, ...other } = user._doc;
+                res.status(200).json(other);
             } catch (err) { res.status(500).json(err); }
         } else {
             res.status(403).json('Unauthorized user');
@@ -65,7 +67,8 @@ router.get('/all', async (req, res) => {
         const cookies = fetchCookies(req);
         if (cookies['userId']) {
             try {
-                const userList = await User.find();
+                const userList = await User.find({}, { _id: 1, full_name: 1, name: 1 });
+                console.log(userList);
                 const results = userList.filter(user => user._id.toString() !== cookies['userId']);
                 if (!results) {
                     res.status(404).json(`No other users except you`);
@@ -82,22 +85,21 @@ router.get('/all', async (req, res) => {
 });
 
 // GET ANOTHER USER
-router.get('/:username', async (req, res) => {
-    if (req.params.username === 'all') {
-        res.redirect('/api/users/all');
-        return;
-    }
+router.get('/:userId', async (req, res) => {
     try {
         const cookies = fetchCookies(req);
         if (cookies['userId']) {
             try {
-                const username = req.params.username;
-                const user = await User.findOne({ username: username });
+                const userId = req.params.userId;
+                // const user = await User.findOne({ username: username });
+                const user = await User.findById(userId);
                 if (!user) {
-                    res.status(404).json(`User not found with Username : ${username}`);
+                    res.status(404).json(`User not found`);
                     return;
                 }
-                res.status(200).json(user);
+                // eslint-disable-next-line no-unused-vars
+                const { password, createdAt, updatedAt, __v, ...other } = user._doc;
+                res.status(200).json(other);
             } catch (err) { res.status(500).json(err); }
         } else {
             res.status(403).json('Unauthorized user');
@@ -115,7 +117,9 @@ router.get('/', async (req, res) => {
             try {
                 const mongoId = cookies['userId'];
                 const user = await User.findById({ _id: mongoId });
-                res.status(200).json(user);
+                // eslint-disable-next-line no-unused-vars
+                const { password, createdAt, updatedAt, __v, ...other } = user._doc;
+                res.status(200).json(other);
             } catch (err) { res.status(500).json(err); }
         } else {
             res.status(403).json('Unauthorized user');
@@ -132,9 +136,9 @@ router.delete('/', async (req, res) => {
         if (cookies['userId']) {
             try {
                 const mongoId = cookies['userId'];
-                const user = await User.remove({ _id: mongoId });
+                await User.deleteOne({ _id: mongoId });
                 res.clearCookie('userId');
-                res.status(200).json(user);
+                res.status(200).json('Account has been deleted');
             } catch (err) { res.status(500).json(err); }
         } else {
             res.status(403).json('Unauthorized user');
