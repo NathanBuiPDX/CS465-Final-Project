@@ -2,24 +2,13 @@ const router = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
-router.post('/other', async (req, res) => {
-    try {
-        const cookies = fetchCookies(req);
-        if (cookies["user"]) {
-            res.status(200).json("Authorized user");
-        } else {
-            res.status(403).json("Unauthorized user");
-        }
-    } catch (error) {
-        res.status(500).json(error);
-    }
-});
-
-router.get('/logout', async (req, res) => {
+// LOGOUT
+router.post('/logout', async (req, res) => {
     res.clearCookie('user');
     res.status(200).json("logout");
 });
 
+// LOGIN USER
 router.post('/login', async (req, res) => {
     try {
         const loginId = req.body.username;
@@ -52,28 +41,9 @@ router.post('/register', async (req, res) => {
     }
 });
 
-function fetchCookies(req) {
-    let cookies = {};
-    req.headers &&
-        req.headers.cookie &&
-        req.headers.cookie.split(";").forEach(function (cookie) {
-            console.log("cookie is:", cookie);
-            if (cookie.match(/(.*?)=(.*)$/)) {
-                const cookieSplit = cookie.match(/(.*?)=(.*)$/);
-                console.log(cookieSplit);
-                cookies[cookieSplit[1].trim()] = (cookieSplit[2] || "").trim();
-            }
-            else {
-                cookies = {};
-            }
-        });
-    return cookies;
-}
-
 async function generateHashedPwd(password) {
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    return hashedPassword;
+    return await bcrypt.hash(password, salt);
 }
 
 module.exports = router;
