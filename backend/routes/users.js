@@ -59,6 +59,23 @@ router.put('/', async (req, res) => {
     }
 });
 
+// GET ALL USERS
+router.get('/all', async (req, res) => {
+    try {
+        const cookies = fetchCookies(req);
+        if (cookies['userId']) {
+            try {
+                const userList = await User.find();
+                res.status(200).json(userList);
+            } catch (err) { res.status(500).json(err); }
+        } else {
+            res.status(403).json('Unauthorized user');
+        }
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
 async function generateHashedPwd(password) {
     const salt = await bcrypt.genSalt(10);
     return await bcrypt.hash(password, salt);
