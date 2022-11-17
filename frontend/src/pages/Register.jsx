@@ -2,8 +2,27 @@ import React, {useState, useRef} from "react";
 
 const Register = () => {
     const usernameRef = useRef("");
+    const passwordRef = useRef("");
+    const prefNameRef = useRef("");
+    const fullNameRef = useRef("");
+    const emailAddressRef = useRef("");
+    const imgRef = useRef("");
+    const maleCheckBoxRef = useRef("");
+    const femaleCheckBoxRef = useRef("");
+    const otherCheckBoxRef = useRef("");
+    const aboutMeRef = useRef("");
     const handleFormRegister = (event) => {
         console.log("USERNAME: ", usernameRef.current.value);
+        console.log("Password: ", passwordRef.current.value);
+        console.log("PrefName: ", prefNameRef.current.value);
+        console.log("FullName: ", fullNameRef.current.value);
+        console.log("Email ", emailAddressRef.current.value);
+        console.log("Img", imgRef.current.value);
+        console.log("maleCheckBox", maleCheckBoxRef.current.checked);
+        console.log("femaleCheckBox", femaleCheckBoxRef.current.checked);
+        console.log("otherCheckBox", otherCheckBoxRef.current.checked);
+        console.log("aboutMe", aboutMeRef.current.value);
+
         event.preventDefault();
     }
   return (
@@ -38,6 +57,7 @@ const Register = () => {
               id="password"
               name="password"
               required
+              ref={passwordRef}
             />
           </div>
           <div class="form-group">
@@ -51,6 +71,7 @@ const Register = () => {
               id="prefName"
               name="prefName"
               required
+              ref={prefNameRef}
             />
           </div>
 
@@ -65,6 +86,7 @@ const Register = () => {
               id="fullName"
               name="fullName"
               required
+              ref={fullNameRef}
             />
           </div>
           <div class="form-group">
@@ -76,6 +98,7 @@ const Register = () => {
               class="form-control"
               id="emailAddress"
               name="emailAddress"
+              ref={emailAddressRef}
             />
           </div>
           <div
@@ -87,7 +110,7 @@ const Register = () => {
             <label for="img">
               <b>Upload a pic </b>
             </label>
-            <input type="file" name="picture" />
+            <input type="file" id="picture" name="picture" ref={imgRef} />
             <button type="submit">Upload</button>
             <img src="url" alt=" " name="pic" />
           </div>
@@ -97,6 +120,7 @@ const Register = () => {
               type="checkbox"
               id="maleCheckBox"
               name="maleCheckBox"
+              ref={maleCheckBoxRef}
             />
             <label class="form-check-label" for="checkBox">
               {" "}
@@ -110,6 +134,7 @@ const Register = () => {
               type="checkbox"
               id="femaleCheckBox"
               name="femaleCheckBox"
+              ref={femaleCheckBoxRef}
             />
             <label class="form-check-label" for="checkBox">
               {" "}
@@ -123,6 +148,7 @@ const Register = () => {
               type="checkBox"
               id="otherCheckBox"
               name="otherCheckBox"
+              ref={otherCheckBoxRef}
             />
             <label class="form-check-label" for="otherCheckBox">
               {" "}
@@ -132,10 +158,17 @@ const Register = () => {
           </div>
 
           <div class="form-group">
-            <label for="commentArea">
+            <label for="aboutMe">
               <b>AboutMe</b>{" "}
             </label>
             <textarea class="form-control" id="aboutMe" rows="4"></textarea>
+            <input
+              class="form-check-input"
+              type="aboutMe"
+              id="aboutMe"
+              name="aboutMe"
+              ref={aboutMeRef}
+            />
           </div>
 
           <div class="form-group row">

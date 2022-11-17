@@ -2,11 +2,14 @@ import React, { useState, useRef } from "react";
 
 const Login = () => {
   const usernameRef = useRef("");
+  const passwordRef = useRef("");
   const handleFormLogin = (event) => {
     console.log("USERNAME: ", usernameRef.current.value);
+    console.log("Password: ", passwordRef.current.value);
     event.preventDefault();
   };
   return (
+      
     <div class="row justify-content-center align-items-center loginFormContainer ">
       <form
         class="border border-dark rounded" onSubmit={handleFormLogin}>
