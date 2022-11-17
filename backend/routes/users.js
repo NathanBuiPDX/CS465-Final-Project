@@ -34,6 +34,9 @@ function fetchCookies(req) {
 
 // UPDATE CURRENT USER
 router.put('/', async (req, res) => {
+    if (!User.schema.path('gender').enumValues.includes(req.body.gender)) {
+        res.status(400).json('Gender values must be in male, female, other').end();
+    }
     try {
         const cookies = fetchCookies(req);
         if (cookies['userId']) {
@@ -48,7 +51,8 @@ router.put('/', async (req, res) => {
             }
             try {
                 const mongoId = cookies['userId'];
-                const user = await User.findByIdAndUpdate({ _id: mongoId }, { $set: req.body });
+                await User.findByIdAndUpdate({ _id: mongoId }, { $set: req.body });
+                const user = await User.findById({ _id: mongoId });
                 // eslint-disable-next-line no-unused-vars
                 const { password, createdAt, updatedAt, __v, ...other } = user._doc;
                 res.status(200).json(other);
