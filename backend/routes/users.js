@@ -66,7 +66,8 @@ router.get('/all', async (req, res) => {
         if (cookies['userId']) {
             try {
                 const userList = await User.find();
-                res.status(200).json(userList);
+                const results = userList.filter(user => user._id.toString() !== cookies['userId']);
+                res.status(200).json(results);
             } catch (err) { res.status(500).json(err); }
         } else {
             res.status(403).json('Unauthorized user');
