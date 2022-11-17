@@ -32,7 +32,7 @@ function fetchCookies(req) {
     return cookies;
 }
 
-// UPDATE USER
+// UPDATE CURRENT USER
 router.put('/', async (req, res) => {
     try {
         const cookies = fetchCookies(req);
@@ -49,6 +49,24 @@ router.put('/', async (req, res) => {
             try {
                 const mongoId = cookies['userId'];
                 const user = await User.findByIdAndUpdate({ _id: mongoId }, { $set: req.body });
+                res.status(200).json(user);
+            } catch (err) { res.status(500).json(err); }
+        } else {
+            res.status(403).json('Unauthorized user');
+        }
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+// GET CURRENT USER
+router.get('/', async (req, res) => {
+    try {
+        const cookies = fetchCookies(req);
+        if (cookies['userId']) {
+            try {
+                const mongoId = cookies['userId'];
+                const user = await User.findById({ _id: mongoId });
                 res.status(200).json(user);
             } catch (err) { res.status(500).json(err); }
         } else {
