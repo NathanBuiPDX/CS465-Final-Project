@@ -59,6 +59,54 @@ router.put('/', async (req, res) => {
     }
 });
 
+// GET ALL USERS
+router.get('/all', async (req, res) => {
+    try {
+        const cookies = fetchCookies(req);
+        if (cookies['userId']) {
+            try {
+                const userList = await User.find();
+                const results = userList.filter(user => user._id.toString() !== cookies['userId']);
+                if (!results) {
+                    res.status(404).json(`No other users except you`);
+                    return;
+                }
+                res.status(200).json(results);
+            } catch (err) { res.status(500).json(err); }
+        } else {
+            res.status(403).json('Unauthorized user');
+        }
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+// GET ANOTHER USER
+router.get('/:username', async (req, res) => {
+    if (req.params.username === 'all') {
+        res.redirect('/api/users/all');
+        return;
+    }
+    try {
+        const cookies = fetchCookies(req);
+        if (cookies['userId']) {
+            try {
+                const username = req.params.username;
+                const user = await User.findOne({ username: username });
+                if (!user) {
+                    res.status(404).json(`User not found with Username : ${username}`);
+                    return;
+                }
+                res.status(200).json(user);
+            } catch (err) { res.status(500).json(err); }
+        } else {
+            res.status(403).json('Unauthorized user');
+        }
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
 // GET CURRENT USER
 router.get('/', async (req, res) => {
     try {
@@ -77,15 +125,16 @@ router.get('/', async (req, res) => {
     }
 });
 
-// GET ALL USERS
-router.get('/all', async (req, res) => {
+// DELETE CURRENT USER
+router.delete('/', async (req, res) => {
     try {
         const cookies = fetchCookies(req);
         if (cookies['userId']) {
             try {
-                const userList = await User.find();
-                const results = userList.filter(user => user._id.toString() !== cookies['userId']);
-                res.status(200).json(results);
+                const mongoId = cookies['userId'];
+                const user = await User.remove({ _id: mongoId });
+                res.clearCookie('userId');
+                res.status(200).json(user);
             } catch (err) { res.status(500).json(err); }
         } else {
             res.status(403).json('Unauthorized user');
