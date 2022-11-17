@@ -1,10 +1,11 @@
 const router = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const cookie = require("./cookie");
 
 router.post('/other', async (req, res) => {
     try {
-        const cookies = fetchCookies(req);
+        const cookies = cookie.fetchCookies(req);
         if (cookies['user']) {
             res.status(200).json('Authorized user');
         } else {
@@ -15,30 +16,13 @@ router.post('/other', async (req, res) => {
     }
 });
 
-function fetchCookies(req) {
-    let cookies = {};
-    req.headers &&
-        req.headers.cookie &&
-        req.headers.cookie.split(';').forEach(function (cookie) {
-            console.log('cookie is:', cookie);
-            if (cookie.match(/(.*?)=(.*)$/)) {
-                const cookieSplit = cookie.match(/(.*?)=(.*)$/);
-                cookies[cookieSplit[1].trim()] = (cookieSplit[2] || '').trim();
-            }
-            else {
-                cookies = {};
-            }
-        });
-    return cookies;
-}
-
 // UPDATE CURRENT USER
 router.put('/', async (req, res) => {
     if (!User.schema.path('gender').enumValues.includes(req.body.gender)) {
         res.status(400).json('Gender values must be in male, female, other').end();
     }
     try {
-        const cookies = fetchCookies(req);
+        const cookies = cookie.fetchCookies(req);
         if (cookies['userId']) {
             if (req.body.password) {
                 try {
@@ -68,7 +52,7 @@ router.put('/', async (req, res) => {
 // GET ALL USERS
 router.get('/all', async (req, res) => {
     try {
-        const cookies = fetchCookies(req);
+        const cookies = cookie.fetchCookies(req);
         if (cookies['userId']) {
             try {
                 const userList = await User.find({}, { _id: 1, full_name: 1, name: 1 });
@@ -91,7 +75,7 @@ router.get('/all', async (req, res) => {
 // GET ANOTHER USER
 router.get('/:userId', async (req, res) => {
     try {
-        const cookies = fetchCookies(req);
+        const cookies = cookie.fetchCookies(req);
         if (cookies['userId']) {
             try {
                 const userId = req.params.userId;
@@ -116,7 +100,7 @@ router.get('/:userId', async (req, res) => {
 // GET CURRENT USER
 router.get('/', async (req, res) => {
     try {
-        const cookies = fetchCookies(req);
+        const cookies = cookie.fetchCookies(req);
         if (cookies['userId']) {
             try {
                 const mongoId = cookies['userId'];
@@ -136,7 +120,7 @@ router.get('/', async (req, res) => {
 // DELETE CURRENT USER
 router.delete('/', async (req, res) => {
     try {
-        const cookies = fetchCookies(req);
+        const cookies = cookie.fetchCookies(req);
         if (cookies['userId']) {
             try {
                 const mongoId = cookies['userId'];
