@@ -1,0 +1,33 @@
+.formContainer {
+  background-color: #427bb5;
+}
+
+
+.formContainer h1 {
+  font-size: 1.6em;
+  text-align: center;
+}
+
+.formContainer form {
+  font-size: 0.8em;
+  margin-top: 5%;
+  margin-bottom: 10%;
+  padding: 20px;
+  background-color: #F8F9FA;
+}
+
+.btn.btn-primary {
+  background-color: #0051A8;
+}
+
+.loginFormContainer form {
+  font-size: 0.8em;
+  margin-top: 50%;
+  margin-bottom: 50%;
+  padding: 20px;
+  background-color: #F8F9FA;
+}
+
+.loginFormContainer {
+  background-color: #427bb5;
+}
