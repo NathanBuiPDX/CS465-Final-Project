@@ -5,10 +5,10 @@ const bcrypt = require('bcrypt');
 router.post('/other', async (req, res) => {
     try {
         const cookies = fetchCookies(req);
-        if (cookies["user"]) {
-            res.status(200).json("Authorized user");
+        if (cookies['user']) {
+            res.status(200).json('Authorized user');
         } else {
-            res.status(403).json("Unauthorized user");
+            res.status(403).json('Unauthorized user');
         }
     } catch (error) {
         res.status(500).json(error);
@@ -19,11 +19,11 @@ function fetchCookies(req) {
     let cookies = {};
     req.headers &&
         req.headers.cookie &&
-        req.headers.cookie.split(";").forEach(function (cookie) {
-            console.log("cookie is:", cookie);
+        req.headers.cookie.split(';').forEach(function (cookie) {
+            console.log('cookie is:', cookie);
             if (cookie.match(/(.*?)=(.*)$/)) {
                 const cookieSplit = cookie.match(/(.*?)=(.*)$/);
-                cookies[cookieSplit[1].trim()] = (cookieSplit[2] || "").trim();
+                cookies[cookieSplit[1].trim()] = (cookieSplit[2] || '').trim();
             }
             else {
                 cookies = {};
@@ -36,22 +36,23 @@ function fetchCookies(req) {
 router.put('/', async (req, res) => {
     try {
         const cookies = fetchCookies(req);
-        if (cookies["user"]) {
+        if (cookies['userId']) {
             if (req.body.password) {
                 try {
                     req.body.password = await generateHashedPwd(req.body.password);
                 }
                 catch (err) {
                     res.status(500).json(err);
+                    return;
                 }
             }
             try {
-                const loginId = cookies["user"];
-                await User.findOneAndUpdate({ username: loginId }, { $set: req.body });
-                res.status(200).json(req.body);
+                const mongoId = cookies['userId'];
+                const user = await User.findByIdAndUpdate({ _id: mongoId }, { $set: req.body });
+                res.status(200).json(user);
             } catch (err) { res.status(500).json(err); }
         } else {
-            res.status(403).json("Unauthorized user");
+            res.status(403).json('Unauthorized user');
         }
     } catch (error) {
         res.status(500).json(error);

@@ -4,8 +4,8 @@ const bcrypt = require('bcrypt');
 
 // LOGOUT
 router.post('/logout', async (req, res) => {
-    res.clearCookie('user');
-    res.status(200).json("logout");
+    res.clearCookie('userId');
+    res.status(200).json('logout');
 });
 
 // LOGIN USER
@@ -13,12 +13,17 @@ router.post('/login', async (req, res) => {
     try {
         const loginId = req.body.username;
         const user = await User.findOne({ username: loginId });
-        if (!user) res.status(404).json(`User not found with Username : ${loginId}`);
+        if (!user) {
+            res.status(404).json(`User not found with Username : ${loginId}`);
+            return;
+        }
 
         const validPassword = await bcrypt.compare(req.body.password, user.password);
-        if (!validPassword) res.status(400).json(`Wrong Password!`);
-
-        res.cookie("user", user.username, { maxAge: 360000 });
+        if (!validPassword) {
+            res.status(400).json(`Wrong Password!`);
+            return;
+        }
+        res.cookie('userId', user._id.toString(), { maxAge: 360000 });
         res.status(200).json(user);
     } catch (error) {
         res.status(500).json(error);
