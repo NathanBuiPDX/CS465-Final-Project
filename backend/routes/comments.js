@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Comment = require('../models/Comment');
+const Post = require('../models/Post');
 const cookie = require("./cookie");
 
 // WRITE A NEW COMMENT BY CURRENT USER
@@ -7,9 +8,15 @@ router.post('/', async (req, res) => {
     try {
         const cookies = cookie.fetchCookies(req);
         if (cookies['userId']) {
+            const post = await Post.findById(req.body.post_id);
+            if (!post) {
+                res.status(404).json(`Post not found`);
+                return;
+            }
             req.body.user_id = cookies['userId'];
             const newComment = new Comment(req.body);
             const comment = await newComment.save();
+            await Post.findByIdAndUpdate({ _id: req.body.post_id }, { $inc: { comments_count: 1 } });
             // eslint-disable-next-line no-unused-vars
             const { __v, ...other } = comment._doc;
             res.status(200).json(other);
