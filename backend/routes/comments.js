@@ -79,7 +79,7 @@ router.put('/:commentId', async (req, res) => {
     }
 });
 
-// GET ALL POST OF ANOTHER USER
+// GET ALL COMMENTS OF A POST
 router.get('/posts/:postId', async (req, res) => {
     try {
         const cookies = cookie.fetchCookies(req);
