@@ -32,6 +32,10 @@ router.put('/:commentId', async (req, res) => {
                 res.status(404).json(`Comment not found`);
                 return;
             }
+            if (comment.user_id.toString() !== cookies['userId']) {
+                res.status(403).json('You are not authorized to update this comment');
+                return;
+            }
             await Comment.findByIdAndUpdate({ _id: commentId }, { $set: req.body });
             res.status(200).json('Comment Updated');
         } else {
