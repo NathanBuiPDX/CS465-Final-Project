@@ -43,6 +43,7 @@ router.delete('/:commentId', async (req, res) => {
                 res.status(403).json('You are not authorized to delete this comment');
                 return;
             }
+            await Post.findByIdAndUpdate({ _id: comment.post_id }, { $inc: { comments_count: -1 } });
             await Comment.findByIdAndDelete(commentId);
             res.status(200).json('Comment deleted');
         } else {
