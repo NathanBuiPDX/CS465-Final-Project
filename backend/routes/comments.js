@@ -46,4 +46,20 @@ router.put('/:commentId', async (req, res) => {
     }
 });
 
+// GET ALL POST OF ANOTHER USER
+router.get('/posts/:postId', async (req, res) => {
+    try {
+        const cookies = cookie.fetchCookies(req);
+        const postId = req.params.postId;
+        if (cookies['userId']) {
+            const commentList = await Comment.find({ post_id: postId }, { __v: 0 });
+            res.status(200).json(commentList);
+        } else {
+            res.status(403).json('Unauthorized user');
+        }
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
 module.exports = router;
