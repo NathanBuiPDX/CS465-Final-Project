@@ -1,33 +1,39 @@
-import React, {useState, useRef} from "react";
-
+import React, { useState, useRef } from "react";
+import "./styles.css";
+import { useHistory } from "react-router-dom";
 const Register = () => {
-    const usernameRef = useRef("");
-    const passwordRef = useRef("");
-    const prefNameRef = useRef("");
-    const fullNameRef = useRef("");
-    const emailAddressRef = useRef("");
-    const imgRef = useRef("");
-    const maleCheckBoxRef = useRef("");
-    const femaleCheckBoxRef = useRef("");
-    const otherCheckBoxRef = useRef("");
-    const aboutMeRef = useRef("");
-    const handleFormRegister = (event) => {
-        console.log("USERNAME: ", usernameRef.current.value);
-        console.log("Password: ", passwordRef.current.value);
-        console.log("PrefName: ", prefNameRef.current.value);
-        console.log("FullName: ", fullNameRef.current.value);
-        console.log("Email ", emailAddressRef.current.value);
-        console.log("Img", imgRef.current.value);
-        console.log("maleCheckBox", maleCheckBoxRef.current.checked);
-        console.log("femaleCheckBox", femaleCheckBoxRef.current.checked);
-        console.log("otherCheckBox", otherCheckBoxRef.current.checked);
-        console.log("aboutMe", aboutMeRef.current.value);
+  const history = useHistory();
+  const usernameRef = useRef("");
+  const passwordRef = useRef("");
+  const prefNameRef = useRef("");
+  const fullNameRef = useRef("");
+  const emailAddressRef = useRef("");
+  const imgRef = useRef("");
+  const maleCheckBoxRef = useRef("");
+  const femaleCheckBoxRef = useRef("");
+  const otherCheckBoxRef = useRef("");
+  const aboutMeRef = useRef("");
+  const handleFormRegister = (event) => {
+    console.log("USERNAME: ", usernameRef.current.value);
+    console.log("Password: ", passwordRef.current.value);
+    console.log("PrefName: ", prefNameRef.current.value);
+    console.log("FullName: ", fullNameRef.current.value);
+    console.log("Email ", emailAddressRef.current.value);
+    console.log("Img", imgRef.current.value);
+    console.log("maleCheckBox", maleCheckBoxRef.current.checked);
+    console.log("femaleCheckBox", femaleCheckBoxRef.current.checked);
+    console.log("otherCheckBox", otherCheckBoxRef.current.checked);
+    console.log("aboutMe", aboutMeRef.current.value);
 
-        event.preventDefault();
-    }
+    event.preventDefault();
+  };
+  const handleFormLogin = (event) => {
+    event.preventDefault();
+    history.push("/Login");
+  };
   return (
-    <div>
-      <div class="row justify-content-center align-items-center formContainer">
+    <div class="row justify-content-center align-items-center formContainer">
+      <div>
         <form class="border border-dark rounded" onSubmit={handleFormRegister}>
           <h1 class="mb-2">
             <strong>REGISTER</strong>
@@ -161,12 +167,11 @@ const Register = () => {
             <label for="aboutMe">
               <b>AboutMe</b>{" "}
             </label>
-            <textarea class="form-control" id="aboutMe" rows="4"></textarea>
+
             <input
-              class="form-check-input"
-              type="aboutMe"
+              class="form-control"
               id="aboutMe"
-              name="aboutMe"
+              rows="4"
               ref={aboutMeRef}
             />
           </div>
@@ -181,6 +186,15 @@ const Register = () => {
               <button type="reset" class="btn btn-secondary btn-block">
                 Reset
               </button>
+            </div>
+            <div class="col">
+            <button
+              type="login"
+              onClick={handleFormLogin}
+              class="btn btn-primary btn-block"
+            >
+              Back To Login Page
+            </button>
             </div>
           </div>
         </form>

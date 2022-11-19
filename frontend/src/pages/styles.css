@@ -1,5 +1,8 @@
 .formContainer {
   background-color: #427bb5;
+    margin-top: 10%;
+  margin-bottom: 10%;
+  padding: 20px;
 }
 
 
@@ -9,6 +12,7 @@
 }
 
 .formContainer form {
+  width:50%;
   font-size: 0.8em;
   margin-top: 5%;
   margin-bottom: 10%;
@@ -20,7 +24,14 @@
   background-color: #0051A8;
 }
 
+.loginFormContainer {
+  background-color: #427bb5;
+  margin-bottom: 10%;
+  padding: 20px;
+}
+
 .loginFormContainer form {
+  width:50%;
   font-size: 0.8em;
   margin-top: 50%;
   margin-bottom: 50%;
