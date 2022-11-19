@@ -28,6 +28,31 @@ router.post('/', async (req, res) => {
     }
 });
 
+// DELETE A COMMENT
+router.delete('/:commentId', async (req, res) => {
+    try {
+        const cookies = cookie.fetchCookies(req);
+        const commentId = req.params.commentId;
+        if (cookies['userId']) {
+            const comment = await Comment.findById(commentId);
+            if (!comment) {
+                res.status(404).json(`Comment not found`);
+                return;
+            }
+            if (comment.user_id.toString() !== cookies['userId']) {
+                res.status(403).json('You are not authorized to delete this comment');
+                return;
+            }
+            await Comment.findByIdAndDelete(commentId);
+            res.status(200).json('Comment deleted');
+        } else {
+            res.status(403).json('Unauthorized user');
+        }
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
 // UPDATE A COMMENT BY CURRENT USER
 router.put('/:commentId', async (req, res) => {
     try {
