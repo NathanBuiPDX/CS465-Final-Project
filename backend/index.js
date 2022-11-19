@@ -9,6 +9,7 @@ const authRoute = require('./routes/auth');
 const userRoute = require('./routes/users');
 const postRoute = require('./routes/posts');
 const commentRoute = require('./routes/comments');
+const likeRoute = require('./routes/likes');
 
 dotenv.config();
 
@@ -28,5 +29,6 @@ app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
 app.use('/api/posts', postRoute);
 app.use('/api/comments', commentRoute);
+app.use('/api/likes', likeRoute);
 
 app.listen(port, () => { console.log(`Server listening to port ${port}`) });
