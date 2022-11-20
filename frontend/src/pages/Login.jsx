@@ -14,10 +14,13 @@ const Login = () => {
     history.push("/Register");
   };
   return (
-    <div class="row loginFormContainer ">
+    <div class="row loginFormContainer">
       <div>
-        <form class=" border border-dark rounded" onSubmit={handleFormLogin}>
-          <h1 class="mb-2">
+        <form
+          class=" border border-dark rounded login-form"
+          onSubmit={handleFormLogin}
+        >
+          <h1 class="mb-2 login-header">
             <strong>Login</strong>
           </h1>
           <div class="form-group">
@@ -27,7 +30,7 @@ const Login = () => {
             </label>
             <input
               type="text"
-              class="form-control col-lg-12"
+              class="form-control col-lg-12 form-input"
               id="userName"
               name="userName"
               required
@@ -52,8 +55,7 @@ const Login = () => {
                 Login
               </button>
             </div>
-          
-          
+
             <div class="col">
               <button
                 type="register"

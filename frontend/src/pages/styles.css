@@ -1,10 +1,8 @@
 .formContainer {
   background-color: #427bb5;
-    margin-top: 10%;
-  margin-bottom: 10%;
+  margin-top: 10%;
   padding: 20px;
 }
-
 
 .formContainer h1 {
   font-size: 1.6em;
@@ -12,31 +10,32 @@
 }
 
 .formContainer form {
-  width:50%;
+  display: flex;
+  flex-direction: column;
   font-size: 0.8em;
-  margin-top: 5%;
-  margin-bottom: 10%;
+  margin-top: 10%;
+  margin-bottom: 50%;
   padding: 20px;
-  background-color: #F8F9FA;
+  background-color: #f8f9fa;
 }
 
 .btn.btn-primary {
-  background-color: #0051A8;
+  background-color: #0051a8;
+  margin-top: 20px;
 }
 
 .loginFormContainer {
   background-color: #427bb5;
-  margin-bottom: 10%;
-  padding: 20px;
 }
 
 .loginFormContainer form {
-  width:50%;
+  display: flex;
+  flex-direction: column;
   font-size: 0.8em;
-  margin-top: 50%;
+  margin-top: 10%;
   margin-bottom: 50%;
   padding: 20px;
-  background-color: #F8F9FA;
+  background-color: #f8f9fa;
 }
 
 .loginFormContainer {
