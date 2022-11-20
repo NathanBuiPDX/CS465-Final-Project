@@ -188,13 +188,13 @@ const Register = () => {
               </button>
             </div>
             <div class="col">
-            <button
-              type="login"
-              onClick={handleFormLogin}
-              class="btn btn-primary btn-block"
-            >
-              Back To Login Page
-            </button>
+              <button
+                type="login"
+                onClick={handleFormLogin}
+                class="btn btn-primary btn-block"
+              >
+                Back To Login Page
+              </button>
             </div>
           </div>
         </form>
