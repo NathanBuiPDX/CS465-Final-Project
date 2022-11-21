@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import "./styles.css";
 import { useHistory } from "react-router-dom";
 const Login = () => {
   const history = useHistory();
@@ -14,53 +15,55 @@ const Login = () => {
     history.push("/Register");
   };
   return (
-    <div class="row loginFormContainer">
+    <div className="row loginFormContainer">
       <div>
         <form
-          class=" border border-dark rounded login-form"
+          className=" border border-dark rounded login-form"
           onSubmit={handleFormLogin}
         >
-          <h1 class="mb-2 login-header">
+          <h1 className="mb-2 login-header">
             <strong>Login</strong>
           </h1>
-          <div class="form-group">
-            <label for="userName">
+          <div className="form-group">
+            <label htmlFor="userName">
               {" "}
               <b>UserName *</b>{" "}
             </label>
             <input
               type="text"
-              class="form-control col-lg-12 form-input"
+              className="form-control col-lg-12 form-input"
               id="userName"
               name="userName"
               required
+              ref={usernameRef}
             />
           </div>
-          <div class="form-group">
-            <label for="password">
+          <div className="form-group">
+            <label htmlFor="password">
               {" "}
               <b>Password *</b>{" "}
             </label>
             <input
               type="text"
-              class="form-control col-lg-12"
+              className="form-control col-lg-12"
               id="password"
               name="password"
               required
+              ref={passwordRef}
             />
           </div>
-          <div class="form-group row">
-            <div class="col">
-              <button type="login" class="btn btn-primary btn-block">
+          <div className="form-group row">
+            <div className="col">
+              <button type="login" className="btn btn-primary btn-block">
                 Login
               </button>
             </div>
 
-            <div class="col">
+            <div className="col">
               <button
                 type="register"
                 onClick={handleFormRegister}
-                class="btn btn-primary btn-block"
+                className="btn btn-primary btn-block"
               >
                 Back to Registration Page
               </button>

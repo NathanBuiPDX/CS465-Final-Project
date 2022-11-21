@@ -24,7 +24,6 @@ const Register = () => {
     console.log("femaleCheckBox", femaleCheckBoxRef.current.checked);
     console.log("otherCheckBox", otherCheckBoxRef.current.checked);
     console.log("aboutMe", aboutMeRef.current.value);
-
     event.preventDefault();
   };
   const handleFormLogin = (event) => {
@@ -32,48 +31,48 @@ const Register = () => {
     history.push("/Login");
   };
   return (
-    <div class="row justify-content-center align-items-center formContainer">
+    <div className="row justify-content-center align-items-center formContainer">
       <div>
-        <form class="border border-dark rounded" onSubmit={handleFormRegister}>
-          <h1 class="mb-2">
+        <form className="border border-dark rounded" onSubmit={handleFormRegister}>
+          <h1 className="mb-2">
             <strong>REGISTER</strong>
           </h1>
-          <div class="form-group">
-            <label for="userName">
+          <div className="form-group">
+            <label htmlFor="userName">
               {" "}
               <b>UserName *</b>{" "}
             </label>
             <input
               type="text"
-              class="form-control col-lg-12"
+              className="form-control col-lg-12"
               id="userName"
               name="userName"
               required
               ref={usernameRef}
             />
           </div>
-          <div class="form-group">
-            <label for="password">
+          <div className="form-group">
+            <label htmlFor="password">
               {" "}
               <b>Password *</b>{" "}
             </label>
             <input
               type="text"
-              class="form-control col-lg-12"
+              className="form-control col-lg-12"
               id="password"
               name="password"
               required
               ref={passwordRef}
             />
           </div>
-          <div class="form-group">
-            <label for="prefName">
+          <div className="form-group">
+            <label htmlFor="prefName">
               {" "}
               <b>Preferred Name *</b>{" "}
             </label>
             <input
               type="text"
-              class="form-control col-lg-12"
+              className="form-control col-lg-12"
               id="prefName"
               name="prefName"
               required
@@ -81,117 +80,117 @@ const Register = () => {
             />
           </div>
 
-          <div class="form-group">
-            <label for="fullName">
+          <div className="form-group">
+            <label htmlFor="fullName">
               {" "}
               <b>Name *</b>{" "}
             </label>
             <input
               type="text"
-              class="form-control col-lg-12"
+              className="form-control col-lg-12"
               id="fullName"
               name="fullName"
               required
               ref={fullNameRef}
             />
           </div>
-          <div class="form-group">
-            <label for="emailAddress">
+          <div className="form-group">
+            <label htmlFor="emailAddress">
               <b>Email Address </b>{" "}
             </label>
             <input
               type="email"
-              class="form-control"
+              className="form-control"
               id="emailAddress"
               name="emailAddress"
               ref={emailAddressRef}
             />
           </div>
           <div
-            class="form-group"
+            className="form-group"
             action="/upload"
             method="POST"
-            enctype="multipart/form-data"
+            encType="multipart/form-data"
           >
-            <label for="img">
+            <label htmlFor="img">
               <b>Upload a pic </b>
             </label>
             <input type="file" id="picture" name="picture" ref={imgRef} />
             <button type="submit">Upload</button>
             <img src="url" alt=" " name="pic" />
           </div>
-          <div class="form-group form-check">
+          <div className="form-group form-check">
             <input
-              class="form-check-input"
+              className="form-check-input"
               type="checkbox"
               id="maleCheckBox"
               name="maleCheckBox"
               ref={maleCheckBoxRef}
             />
-            <label class="form-check-label" for="checkBox">
+            <label className="form-check-label" htmlFor="checkBox">
               {" "}
               <b>Male</b>
             </label>
             <br />
           </div>
-          <div class="form-group form-check">
+          <div className="form-group form-check">
             <input
-              class="form-check-input"
+              className="form-check-input"
               type="checkbox"
               id="femaleCheckBox"
               name="femaleCheckBox"
               ref={femaleCheckBoxRef}
             />
-            <label class="form-check-label" for="checkBox">
+            <label className="form-check-label" htmlFor="checkBox">
               {" "}
               <b>Female</b>
             </label>
             <br />
           </div>
-          <div class="form-group form-check">
+          <div className="form-group form-check">
             <input
-              class="form-check-input"
+              className="form-check-input"
               type="checkBox"
               id="otherCheckBox"
               name="otherCheckBox"
               ref={otherCheckBoxRef}
             />
-            <label class="form-check-label" for="otherCheckBox">
+            <label className="form-check-label" htmlFor="otherCheckBox">
               {" "}
               <b>Other</b>
             </label>
             <br />
           </div>
 
-          <div class="form-group">
-            <label for="aboutMe">
+          <div className="form-group">
+            <label htmlFor="aboutMe">
               <b>AboutMe</b>{" "}
             </label>
 
             <input
-              class="form-control"
+              className="form-control"
               id="aboutMe"
               rows="4"
               ref={aboutMeRef}
             />
           </div>
 
-          <div class="form-group row">
-            <div class="col">
-              <button type="submit" class="btn btn-primary btn-block">
+          <div className="form-group row">
+            <div className="col">
+              <button type="submit" className="btn btn-primary btn-block">
                 Submit
               </button>
             </div>
-            <div class="col">
-              <button type="reset" class="btn btn-secondary btn-block">
+            <div className="col">
+              <button type="reset" className="btn btn-primary btn-block">
                 Reset
               </button>
             </div>
-            <div class="col">
+            <div className="col">
               <button
                 type="login"
                 onClick={handleFormLogin}
-                class="btn btn-primary btn-block"
+                className="btn btn-primary btn-block"
               >
                 Back To Login Page
               </button>
