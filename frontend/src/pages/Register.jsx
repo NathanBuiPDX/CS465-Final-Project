@@ -1,18 +1,38 @@
 import React, { useState, useRef } from "react";
 import "./styles.css";
 import { useHistory } from "react-router-dom";
+import axios from "axios"
+//call register endpoint when submitting the form
 const Register = () => {
+
+
   const history = useHistory();
   const usernameRef = useRef("");
   const passwordRef = useRef("");
   const prefNameRef = useRef("");
   const fullNameRef = useRef("");
   const emailAddressRef = useRef("");
+  const [profileFile, setProfileFile] = useState(null);
   const imgRef = useRef("");
   const maleCheckBoxRef = useRef("");
   const femaleCheckBoxRef = useRef("");
   const otherCheckBoxRef = useRef("");
   const aboutMeRef = useRef("");
+  
+ const handleImageUpload = (event) => {
+    event.preventDefault();
+    try {
+      console.log("FILE: ", event.target.files[0]);
+      //event.target is the place where we upload image/txt
+      //if we want to extract the img, must call event.target.files 0,1,2 depending on position
+      //if we want to extract the inputTxt, it will be event.target.value
+      setProfileFile(event.target.files[0]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  
   const handleFormRegister = (event) => {
     console.log("USERNAME: ", usernameRef.current.value);
     console.log("Password: ", passwordRef.current.value);
@@ -25,6 +45,25 @@ const Register = () => {
     console.log("otherCheckBox", otherCheckBoxRef.current.checked);
     console.log("aboutMe", aboutMeRef.current.value);
     event.preventDefault();
+    
+
+      axios
+        .post("http://localhost:8800/api/auth/register", {
+          username: usernameRef.current.value,
+          password: passwordRef.current.value,
+          name: prefNameRef.current.value,
+          full_name: fullNameRef.current.value,
+          email: emailAddressRef.current.value,
+          icon_url: profileFile,
+          about: aboutMeRef.current.value,
+        })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          window.alert("unable to register");
+          console.log(error);
+        });
   };
   const handleFormLogin = (event) => {
     event.preventDefault();
@@ -57,7 +96,7 @@ const Register = () => {
               <b>Password *</b>{" "}
             </label>
             <input
-              type="text"
+              type="password"
               className="form-control col-lg-12"
               id="password"
               name="password"
