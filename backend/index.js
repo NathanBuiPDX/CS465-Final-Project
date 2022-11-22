@@ -10,6 +10,9 @@ const userRoute = require('./routes/users');
 const postRoute = require('./routes/posts');
 const commentRoute = require('./routes/comments');
 const likeRoute = require('./routes/likes');
+var cors = require('cors')
+
+app.use(cors())
 
 dotenv.config();
 
