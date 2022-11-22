@@ -29,7 +29,8 @@ const InfoProvider = ({ children }) => {
 		});
 	};
 
-	const addCurrentUser = (currentUser) => {
+	const modifyCurrentUser = (currentUser) => {
+		console.log("Modifying Current User: ". currentUser);
 		setCurrentUser(currentUser);
 	};
 
@@ -43,7 +44,7 @@ const InfoProvider = ({ children }) => {
 				comments: comments,
 				recentlySearch: recentlySearch,
 				addRecentlySearch: addRecentlySearch,
-				setCurrentUser: addCurrentUser,
+				modifyCurrentUser: modifyCurrentUser,
 			}}
 		>
 			{children}

@@ -3,14 +3,19 @@ import './CommentCreation.css';
 import { useContext, useState, useRef } from 'react';
 import { InfoContext } from './InfoProvider';
 import { Send } from '@material-ui/icons';
+import { useEffect } from 'react';
 
 const DEFAULT_PROFILE_IMG = process.env.REACT_APP_DEFAULT_ICON;
 
 const CommentCreation = (props) => {
 	const context = useContext(InfoContext);
-	const [user, setUser] = useState(context.currentUser);
+	const [user, setUser] = useState({});
 	const comment = useRef('');
 
+	useEffect(() =>{
+		setUser(context.currentUser);
+	}, [context.currentUser]);
+	
 	const handleSUbmitButtonClick = (event) => {
 		event.preventDefault();
 		props.submitComment(comment.current.value);

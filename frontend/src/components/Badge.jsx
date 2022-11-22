@@ -15,6 +15,7 @@ const Bagde = ({ post }) => {
 	
 	useEffect(() => {
 		setPostDuration(submitDuration(post.post_time));
+		//TODO: call GET /:userID instead
 		const tempUser = context.users.find((user) => user.id === post.user_id);
 		tempUser.icon_url = tempUser.icon_url || DEFAULT_PROFILE_IMG;
 		setUser(tempUser);

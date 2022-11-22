@@ -31,7 +31,7 @@ const UserPage = (props) => {
 	console.log('USERID: ', userID);
 
 	useEffect(() => {
-		//TODO: call GET /posts instead of context.posts
+		//TODO: call GET /posts instead of context.posts and GET /:userID instead of context.users filter
 		let posts = context.posts.filter((post) => post.user_id === userID);
 		let user = context.users.find((user) => user.id === userID);
 		console.log('USER: ', user);
@@ -67,6 +67,7 @@ const UserPage = (props) => {
 		}
 		setUser(updateUser);
 		setImagePreview(null);
+		context.modifyCurrentUser(updateUser);
 		console.log('Updated User Profile!');
 	};
 
@@ -183,18 +184,18 @@ const UserPage = (props) => {
 								<div className="infoLabel">Preffer Name:</div>
 								<div className="infoData">{user.name}</div>
 							</div>
-							<div className="infoRow">
+							{user.gender && <div className="infoRow">
 								<div className="infoLabel">Gender:</div>
 								<div className="infoData">{user.gender}</div>
-							</div>
-							<div className="infoRow">
+							</div>}
+							{user.dob && <div className="infoRow">
 								<div className="infoLabel">Date Of Birth:</div>
 								<div className="infoData">{user.dob}</div>
-							</div>
-							<div className="infoRow">
+							</div>}
+							{user.about && <div className="infoRow">
 								<div className="infoLabel">About Me:</div>
 								<div className="infoData">{user.about}</div>
-							</div>
+							</div>}
 						</div>
 
 						<div className="userPost col-12 col-md-8">

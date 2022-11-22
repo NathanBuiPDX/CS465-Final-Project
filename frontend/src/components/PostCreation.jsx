@@ -2,6 +2,7 @@ import React, { useState, useRef, useContext } from 'react';
 import './PostCreation.css';
 import { Block, Photo } from '@material-ui/icons';
 import { InfoContext } from './InfoProvider';
+import { useEffect } from 'react';
 
 const PostCreation = ({submitPost}) => {
 	const context = useContext(InfoContext);
@@ -9,7 +10,11 @@ const PostCreation = ({submitPost}) => {
 	const [file, setFile] = useState(null);
 	const [imagePreview, setImagePreview] = useState(null);
 	const [isUpdating, setIsUpdating] = useState(false);
-	const currentUser = context.currentUser;
+	const [currentUser, setCurrentUser] = useState(context.currentUser);
+	
+	useEffect(() => {
+		setCurrentUser(context.currentUser);
+	}, [context.currentUser])
 
 	const handleImageUpload = (event) => {
 		event.preventDefault();

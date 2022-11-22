@@ -5,12 +5,24 @@ import UserFigure from './UserFigure';
 import { useContext } from 'react';
 import { InfoContext } from './InfoProvider';
 import { useHistory } from 'react-router-dom';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const NavBar = () => {
 	const history = useHistory();
 	const context = useContext(InfoContext);
-	const user = context.currentUser;
-	const recentlySearch = context.recentlySearch;
+	const [user, setUser] = useState(context.currentUser);
+	const [recentlySearch, setRecentlySearch] = useState(context.recentlySearch);
+	
+	useEffect(() => {
+		setUser(context.currentUser);
+	}, [context.currentUser]);
+
+	useEffect(() => {
+		setRecentlySearch(context.recentlySearch);
+	}, [context.recentlySearch]);
+
+
 
 	const handleSearchClick = (event, userID) => {
 		event.preventDefault();
@@ -21,6 +33,11 @@ const NavBar = () => {
 			window.alert('ERROR: ', err.message);
 		}
 	};
+
+	const handleLogout = (event) => {
+		console.log("Logging out");
+		history.push('/login');
+	}
 
 	return (
 		<div className="navBarContainer bg-dark">
@@ -58,7 +75,7 @@ const NavBar = () => {
 			</div>
 			<div className="navBarRight d-flex">
 				<UserFigure user={user} />
-				<button type="button" className="mx-3 btn btn-dark">
+				<button type="button" className="mx-3 btn btn-dark" onClick={handleLogout}>
 					<b>Logout</b>
 				</button>
 			</div>

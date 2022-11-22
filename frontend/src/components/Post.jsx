@@ -60,8 +60,9 @@ const Post = ({ post: initialPost, deletePost }) => {
 			// get the post again
 			let updatePost = {
 				caption: caption,
-				image_url: file || prevPost.image_url,
 			};
+			if (file) updatePost.image_url = file;
+			
 			console.log('UPDATING POST: ', updatePost);
 			setPost({
 				...prevPost,

@@ -31,7 +31,7 @@ const NewsFeed = () => {
 			//TODO remove this random number
 			data.id = Math.random();
 			console.log("NewsFeed file Receiving NEW POST: ", data);
-			//call POST /post then get post again
+			//TODO: call POST /post then get post again instead of fetching posts like below
 			// getPosts();
 			//TODO: remove this one
 			setPosts(prevPosts => [data,...prevPosts]);
