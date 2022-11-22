@@ -4,6 +4,7 @@ export const Users = [
         name: "nathan",
         full_name: "nathan bui",
         icon_url: "/assets/2.png",
+        cover_url: "/assets/cover-1.jpg",
         gender: "male",
         dob: "22/03/2000",
         about: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. \
@@ -14,7 +15,6 @@ export const Users = [
         id: "2",
         name: "micheal",
         full_name: "micheal kor",
-        icon_url: "/assets/1.png",
         gender: "male",
         dob: "22/03/2000",
         about: "love doing stuff"

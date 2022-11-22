@@ -1,6 +1,6 @@
 import './App.css';
-import NavBar from "./components/NavBar";
-import NewsFeed from "./pages/NewsFeed";
+import NavBar from './components/NavBar';
+import NewsFeed from './pages/NewsFeed';
 import UserPage from './pages/UserPage';
 import Register from './pages/Register';
 import Login from "./pages/Login";
@@ -28,7 +28,7 @@ function App() {
         </Switch>
       </Router>
     </div>
-  );
+  )
 }
 
 export default App;
