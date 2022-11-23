@@ -56,13 +56,12 @@ router.get('/all', async (req, res) => {
         if (cookies['userId']) {
             try {
                 const userList = await User.find({}, { _id: 1, full_name: 1, name: 1 });
-                console.log(userList);
-                const results = userList.filter(user => user._id.toString() !== cookies['userId']);
-                if (!results) {
-                    res.status(404).json(`No other users except you`);
-                    return;
-                }
-                res.status(200).json(results);
+                // const results = userList.filter(user => user._id.toString() !== cookies['userId']);
+                // if (!results) {
+                //     res.status(404).json(`No other users except you`);
+                //     return;
+                // }
+                res.status(200).json(userList);
             } catch (err) { res.status(500).json(err); }
         } else {
             res.status(403).json('Unauthorized user');
