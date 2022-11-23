@@ -12,7 +12,13 @@ const commentRoute = require('./routes/comments');
 const likeRoute = require('./routes/likes');
 var cors = require('cors')
 
-app.use(cors())
+app.use(cors(
+    {
+        origin: 'http://localhost:3000',
+        credentials: true,
+        method: ['GET', 'POST', 'DELETE', 'PUT']
+    }
+))
 
 dotenv.config();
 
