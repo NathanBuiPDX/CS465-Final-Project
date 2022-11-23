@@ -13,6 +13,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import {InfoContext} from './components/InfoProvider';
+import PostCreation from './components/PostCreation';
 
 function App() {
   const context = useContext(InfoContext);
@@ -25,10 +26,11 @@ function App() {
           <Route path="/user/:userID" component={UserPage} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
+          
         </Switch>
       </Router>
     </div>
-  )
+  );
 }
 
 export default App;

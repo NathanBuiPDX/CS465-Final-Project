@@ -1,14 +1,33 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import "./styles.css";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
+import { InfoContext } from "../components/InfoProvider";
+
 const Login = () => {
+  const context = useContext(InfoContext);
   const history = useHistory();
   const usernameRef = useRef("");
   const passwordRef = useRef("");
-  const handleFormLogin = (event) => {
+  const handleFormLogin =  (event) => {
     console.log("USERNAME: ", usernameRef.current.value);
     console.log("Password: ", passwordRef.current.value);
     event.preventDefault();
+          axios
+            .post("http://localhost:8800/api/auth/login", {
+              username: usernameRef.current.value,
+              password: passwordRef.current.value,
+            })
+            .then(function (response) {
+              localStorage.setItem("userId",response.data._id);
+              context.modifyCurrentUser(response.data)
+              console.log(response);
+            })
+            .catch(function (error) {
+              window.alert("unable to register");
+              console.log(error);
+            });
+            history.push("/");
   };
   const handleFormRegister = (event) => {
     event.preventDefault();
@@ -54,7 +73,11 @@ const Login = () => {
           </div>
           <div className="form-group row">
             <div className="col">
-              <button type="login" className="btn btn-primary btn-block">
+              <button
+                type="login"
+                onClick={handleFormLogin}
+                className="btn btn-primary btn-block"
+              >
                 Login
               </button>
             </div>

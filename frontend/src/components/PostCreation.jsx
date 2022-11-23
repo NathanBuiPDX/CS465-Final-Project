@@ -3,6 +3,7 @@ import './PostCreation.css';
 import { Block, Photo } from '@material-ui/icons';
 import { InfoContext } from './InfoProvider';
 import { useEffect } from 'react';
+import axios from "axios";
 
 const PostCreation = ({submitPost}) => {
 	const context = useContext(InfoContext);
@@ -31,6 +32,24 @@ const PostCreation = ({submitPost}) => {
 
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
+		// let headers = {Cookie:`userId=${localStorage.getItem('userId')}`}} 
+		axios
+            .post("http://localhost:8800/api/posts", {
+              user_id: currentUser.id,
+              caption: content.current.value,
+              like_count: 0,
+              comments_count: 0,
+              image_url: imagePreview,
+
+
+            }, {headers:{"Cookie":`userId=${localStorage.getItem('userId')}`}})
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              window.alert("unable to register");
+              console.log(error);
+            });
 		setIsUpdating(true);
 		console.log('Form Submitted with content: ', content.current.value);
 		setTimeout(() => {
@@ -57,6 +76,8 @@ const PostCreation = ({submitPost}) => {
 			}
 			// URL.revokeObjectURL(imagePreview);
 		}, 2000);
+	
+		
 	};
 
 	return (

@@ -9,15 +9,7 @@ const InfoProvider = ({ children }) => {
 	const [posts, setPosts] = useState([...Posts]);
 	const [comments, setComments] = useState([...Comments]);
 	const [users, setUser] = useState([...Users]);
-	const [currentUser, setCurrentUser] = useState({
-		id: '1',
-		name: 'nathan',
-		full_name: 'nathan bui',
-		icon_url: '/assets/2.png',
-		gender: 'male',
-		dob: '22/03/2000',
-		about: 'love doing stuff',
-	});
+	const [currentUser, setCurrentUser] = useState({});
 	const [recentlySearch, setRecentlySearch] = useState([...Users]);
 
 	const addRecentlySearch = (newSearch) => {
