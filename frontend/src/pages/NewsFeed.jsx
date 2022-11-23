@@ -5,46 +5,63 @@ import Post from '../components/Post';
 import { InfoContext } from '../components/InfoProvider';
 import NavBar from '../components/NavBar';
 import { useEffect } from 'react';
-
+import axios from 'axios';
+import { getCookie } from '../utilities/Helpers';
+import { useHistory } from 'react-router-dom';
 const NewsFeed = () => {
+	const history = useHistory();
 	const context = useContext(InfoContext);
 	const [posts, setPosts] = useState([]);
-
 	const getPosts = () => {
 		// Calling GET /posts
-		try{
-			// const posts = await
-			let tempPosts = context.posts;
-			setPosts(tempPosts);
-		}
-		catch(err) {
-			window.alert("ERROR FETCHING POSTS: ", err);
-		}
+		axios
+		.get("http://localhost:8800/api/posts", { withCredentials:true})
+		.then(function (response) {
+			setPosts(response.data);
+			console.log(response.data);
+		})
+		.catch(function (error) {
+			window.alert("ERROR FETCHING POSTS: ", error);
+			console.log(error);
+		});
 	}
 
 	useEffect(() => {
-		getPosts();
+		let cookie = getCookie('userId');
+		if (!cookie) history.push('/login');
+		else getPosts();
 	}, [])
 
 	const handleCreatePost = (data) => {
-		try{
-			//TODO remove this random number
-			data.id = Math.random();
-			console.log("NewsFeed file Receiving NEW POST: ", data);
-			//TODO: call POST /post then get post again instead of fetching posts like below
-			// getPosts();
-			//TODO: remove this one
-			setPosts(prevPosts => [data,...prevPosts]);
-		} catch(err) {
-			window.alert("ERROR CREATING NEW POST NEWSFEED PAGE:", err);
-		}
+		console.log("NewsFeed file Receiving NEW POST: ", data);
+		axios
+		.post("http://localhost:8800/api/posts", data, { withCredentials:true})
+		.then(function (response) {
+			setPosts(prevPosts => [response.data,...prevPosts]);
+			console.log(response.data);
+		})
+		.catch(function (error) {
+			window.alert("ERROR CREATING NEW POST NEWSFEED PAGE:", error);
+			console.log(error);
+		});
+
 	}
 
 	const handleDeletePost = (postID) => {
 		console.log("NewsFeed file Receiving DELETED POSTID: ", postID);
 		//TODO: call delete then call getPosts() again
+		axios
+		.delete("http://localhost:8800/api/posts/"+postID, { withCredentials:true})
+		.then(function (response) {
+			console.log(response.data);
+		})
+		.catch(function (error) {
+			window.alert("ERROR DELETING POST IN NEWSFEED PAGE:", postID);
+			console.log(error);
+		});
+
 		let tempPosts = [...posts];
-		tempPosts = tempPosts.filter(post => post.id !== postID);
+		tempPosts = tempPosts.filter(post => post._id !== postID);
 		setPosts(tempPosts);
 	}
 
@@ -55,7 +72,7 @@ const NewsFeed = () => {
 			<div className="newsFeed">
 				<PostCreation submitPost={handleCreatePost}/>
 				{posts.map((post) => (
-					<Post key={post.id} post={post} deletePost={handleDeletePost}/>
+					<Post key={post._id} post={post} deletePost={handleDeletePost}/>
 				))}
 			</div>
 		</>

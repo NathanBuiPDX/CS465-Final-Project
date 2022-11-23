@@ -8,6 +8,8 @@ import PostCreation from '../components/PostCreation';
 import Post from '../components/Post';
 import NavBar from '../components/NavBar';
 import { Edit, CameraAlt } from '@material-ui/icons';
+import { getCookie } from '../utilities/Helpers';
+import { useHistory } from 'react-router-dom';
 
 const PROFILE_IMAGE = 'Profile Image';
 const COVER_IMAGE = 'Cover Image';
@@ -16,6 +18,7 @@ const DEFAULT_PROFILE_IMG = process.env.REACT_APP_DEFAULT_ICON;
 const DEFAULT_COVER_IMG = process.env.REACT_APP_DEFAULT_COVER;
 console.log('DEFAULT COVER IMG: ', DEFAULT_COVER_IMG);
 const UserPage = (props) => {
+	const history = useHistory();
 	const context = useContext(InfoContext);
 	const [userPosts, setUserPosts] = useState([]);
 	const [user, setUser] = useState({});
@@ -31,12 +34,15 @@ const UserPage = (props) => {
 	console.log('USERID: ', userID);
 
 	useEffect(() => {
+		let cookie = getCookie('userId');
+		if (!cookie) history.push('/login');
+	}, [])
+
+	useEffect(() => {
 		//TODO: call GET /posts instead of context.posts and GET /:userID instead of context.users filter
 		let posts = context.posts.filter((post) => post.user_id === userID);
-		let user = context.users.find((user) => user.id === userID);
+		let user = context.users.find((user) => {console.log("USER: ", user); return user._id === userID});
 		console.log('USER: ', user);
-		user.icon_url = user.icon_url ? user.icon_url : DEFAULT_PROFILE_IMG;
-		user.cover_url = user.cover_url ? user.cover_url : DEFAULT_COVER_IMG;
 
 		setUser(user);
 		setUserPosts(posts);
@@ -85,17 +91,11 @@ const UserPage = (props) => {
 	};
 
 	const handleCreatePost = (data) => {
-		try{
-			//TODO remove this random number
-			data.id = Math.random();
-			console.log("NewsFeed file Receiving NEW POST: ", data);
-			//call POST /post then get post again
-			// getPosts();
-			//TODO: remove this one
-			setUserPosts(prevPosts => [data,...prevPosts]);
-		} catch(err) {
-			window.alert("ERROR CREATING NEW POST PROFILE PAGE:", err);
-		}
+
+		console.log("NewsFeed file Receiving NEW POST: ", data);
+		//call POST /post then get post again
+		setUserPosts(prevPosts => [data,...prevPosts]);
+
 	}
 
 	const handleDeletePost = (postID) => {
@@ -118,16 +118,16 @@ const UserPage = (props) => {
 					<div className="userImages">
 						<div style={{ width: '100%' }}>
 							<img
-								src={user.cover_url}
+								src={user?.cover_url || DEFAULT_COVER_IMG}
 								className="coverImg"
 								alt={`profile page user icon ${user.icon_url}`}
 							/>
 							<img
-								src={user.icon_url}
+								src={user?.icon_url || DEFAULT_PROFILE_IMG}
 								className="profileImg"
 								alt={`profile page user icon ${user.icon_url}`}
 							/>
-							{userID === context.currentUser.id && (
+							{userID === context.currentUser._id && (
 								<button
 									className="btn btn-light py-1 editCoverImgButton"
 									data-bs-toggle="modal"
@@ -138,7 +138,7 @@ const UserPage = (props) => {
 									<span className="noDisplay">Edit Cover Picture</span>
 								</button>
 							)}
-							{userID === context.currentUser.id && (
+							{userID === context.currentUser._id && (
 								<button
 									id="iconPicture"
 									className="btn btn-dark rounded-circle p-1 editProfileImgButton"
@@ -163,7 +163,7 @@ const UserPage = (props) => {
 						<div className="userInfo col-12 col-md-4 bg-light">
 							<div className="about">
 								About {user.name}
-								{userID === context.currentUser.id && (
+								{userID === context.currentUser._id && (
 									<button
 										data-bs-toggle="modal"
 										data-bs-target="#updateProfileModal"
@@ -199,9 +199,9 @@ const UserPage = (props) => {
 						</div>
 
 						<div className="userPost col-12 col-md-8">
-							{userID === context.currentUser.id && <PostCreation submitPost={handleCreatePost} />}
+							{userID === context.currentUser._id && <PostCreation submitPost={handleCreatePost} />}
 							{userPosts.map((post) => (
-								<Post key={post.id} post={post} deletePost={handleDeletePost} />
+								<Post key={post._id || post.id} post={post} deletePost={handleDeletePost} />
 							))}
 						</div>
 					</div>

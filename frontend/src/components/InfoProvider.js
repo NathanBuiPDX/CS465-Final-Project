@@ -1,16 +1,46 @@
-import React, { useState } from 'react';
-import { Users, Posts, Comments } from '../mockdata';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { getCookie } from '../utilities/Helpers';
 
 export const InfoContext = React.createContext();
 
 const InfoProvider = ({ children }) => {
 	//MOCKDATA
 	const [likes, setLikes] = useState([]);
-	const [posts, setPosts] = useState([...Posts]);
-	const [comments, setComments] = useState([...Comments]);
-	const [users, setUser] = useState([...Users]);
+	const [posts, setPosts] = useState([]);
+	const [comments, setComments] = useState([]);
+	const [users, setUser] = useState([]);
 	const [currentUser, setCurrentUser] = useState({});
-	const [recentlySearch, setRecentlySearch] = useState([...Users]);
+	const [recentlySearch, setRecentlySearch] = useState([]);
+
+	let cookie = getCookie('userId');
+
+	useEffect(() => {
+		if (cookie) 
+		{
+			axios
+			.get("http://localhost:8800/api/users/all",  { withCredentials:true})
+			.then(function (response) {
+				setUser(response.data);
+				console.log("Fetching users from context: ", response.data);
+			})
+			.catch(function (error) {
+				window.alert("ERROR fetching User from context:", error);
+				console.log(error);
+			});
+
+			axios
+			.get("http://localhost:8800/api/users",  { withCredentials:true})
+			.then(function (response) {
+				setCurrentUser(response.data);
+				console.log("Fetching currentUser from context: ", response.data);
+			})
+			.catch(function (error) {
+				window.alert("ERROR fetching current user from context:", error);
+				console.log(error);
+			});
+		}
+	}, [cookie])
 
 	const addRecentlySearch = (newSearch) => {
 		setRecentlySearch((currentArraySearch) => {
@@ -22,7 +52,7 @@ const InfoProvider = ({ children }) => {
 	};
 
 	const modifyCurrentUser = (currentUser) => {
-		console.log("Modifying Current User: ". currentUser);
+		console.log("Modifying Current User: ", currentUser);
 		setCurrentUser(currentUser);
 	};
 

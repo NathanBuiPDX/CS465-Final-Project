@@ -17,17 +17,17 @@ const Login = () => {
             .post("http://localhost:8800/api/auth/login", {
               username: usernameRef.current.value,
               password: passwordRef.current.value,
-            })
+            }, { withCredentials:true})
             .then(function (response) {
-              localStorage.setItem("userId",response.data._id);
+              console.log("RESPONSE: ", response.data);
+              document.cookie=`userId=${response.data._id}`;
               context.modifyCurrentUser(response.data)
-              console.log(response);
+              history.push("/");
             })
             .catch(function (error) {
               window.alert("unable to register");
               console.log(error);
             });
-            history.push("/");
   };
   const handleFormRegister = (event) => {
     event.preventDefault();

@@ -22,7 +22,7 @@ function App() {
     <div className="app">
       <Router>
         <Switch>
-          <Route exact path="/" component={user ? NewsFeed : null} />
+          <Route exact path="/" component={NewsFeed} />
           <Route path="/user/:userID" component={UserPage} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />

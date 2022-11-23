@@ -14,12 +14,11 @@ const Bagde = ({ post }) => {
 	const [postDuration, setPostDuration] = useState('');
 	
 	useEffect(() => {
-		setPostDuration(submitDuration(post.post_time));
+		setPostDuration(submitDuration(post.createdAt));
 		//TODO: call GET /:userID instead
-		const tempUser = context.users.find((user) => user.id === post.user_id);
-		tempUser.icon_url = tempUser.icon_url || DEFAULT_PROFILE_IMG;
+		const tempUser = context.users.find((user) => user._id === post.user_id);
 		setUser(tempUser);
-	}, []);
+	}, [JSON.stringify(context.currentUser) === '{}']);
 
 	const submitDuration = (submittedTime) => {
 		//Temp
@@ -30,10 +29,10 @@ const Bagde = ({ post }) => {
 	};
 
 	return (
-		<div className="userBagde" onClick={() => history.push(`/user/${user.id}`)}>
-			<img src={user.icon_url} alt={user.icon_url} className="userIcon" />
+		<div className="userBagde" onClick={() => history.push(`/user/${user._id}`)}>
+			<img src={user?.icon_url || DEFAULT_PROFILE_IMG} alt={user?.icon_url || DEFAULT_PROFILE_IMG} className="userIcon" />
 			<div className="bagdeInfo">
-				<p className="userName">{user.name}</p>
+				<p className="userName">{user?.name}</p>
 				<p className="timeDuration">{postDuration}</p>
 			</div>
 		</div>

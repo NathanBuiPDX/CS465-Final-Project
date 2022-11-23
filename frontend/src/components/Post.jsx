@@ -77,7 +77,7 @@ const Post = ({ post: initialPost, deletePost }) => {
 
 	const handleDeletePost = (event) => {
 		event.preventDefault();
-		deletePost(post.id);
+		deletePost(post._id);
 	};
 
 	const handleSubmitComment = (data) => {
@@ -105,7 +105,7 @@ const Post = ({ post: initialPost, deletePost }) => {
 		<div className="post bg-light">
 			<div className="postTop d-flex justify-content-between">
 				<Bagde post={post} />
-				{post.user_id === currentUser.id && (
+				{post.user_id === currentUser._id && (
 					<div className="dropdown">
 						<button
 							className="btn btn-light"
@@ -246,7 +246,7 @@ const Post = ({ post: initialPost, deletePost }) => {
 					<Fragment>
 						<CommentCreation submitComment={handleSubmitComment} />
 						{comments.map((comment) => (
-							<Comment key={comment.id} comment={comment} />
+							<Comment key={comment._id || comment.id} comment={comment} />
 						))}
 					</Fragment>
 				)}
