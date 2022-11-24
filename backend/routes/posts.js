@@ -49,12 +49,31 @@ router.put('/:postId', async (req, res) => {
     }
 });
 
+// GET ALL POST OF ALL USER
+router.get('/all', async (req, res) => {
+    try {
+        const cookies = cookie.fetchCookies(req);
+        if (cookies['userId']) {
+            const postList = await Post.find({}).sort({ updatedAt: -1 });
+            if (!postList) {
+                res.status(200).json(`No Post found`);
+                return;
+            }
+            res.status(200).json(postList);
+        } else {
+            res.status(403).json('Unauthorized user');
+        }
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
 // GET ALL POST OF CURRENT USER
 router.get('/', async (req, res) => {
     try {
         const cookies = cookie.fetchCookies(req);
         if (cookies['userId']) {
-            const postList = await Post.find({ user_id: cookies['userId'] });
+            const postList = await Post.find({ user_id: cookies['userId'] }).sort({ updatedAt: -1 });
             if (!postList) {
                 res.status(200).json(`No Post found`);
                 return;
@@ -74,7 +93,7 @@ router.get('/users/:userId', async (req, res) => {
         const cookies = cookie.fetchCookies(req);
         const userId = req.params.userId;
         if (cookies['userId']) {
-            const postList = await Post.find({ user_id: userId }, { __v: 0 });
+            const postList = await Post.find({ user_id: userId }, { __v: 0 }).sort({ updatedAt: -1 });
             if (!postList) {
                 res.status(200).json(`No Post found`);
                 return;
