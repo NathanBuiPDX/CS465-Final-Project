@@ -85,7 +85,7 @@ router.get('/posts/:postId', async (req, res) => {
         const cookies = cookie.fetchCookies(req);
         const postId = req.params.postId;
         if (cookies['userId']) {
-            const commentList = await Comment.find({ post_id: postId }, { __v: 0 });
+            const commentList = await Comment.find({ post_id: postId }, { __v: 0 }).sort({ updatedAt: -1 });
             res.status(200).json(commentList);
         } else {
             res.status(403).json('Unauthorized user');
