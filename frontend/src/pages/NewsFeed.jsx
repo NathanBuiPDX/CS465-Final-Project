@@ -15,7 +15,7 @@ const NewsFeed = () => {
 	const getPosts = () => {
 		// Calling GET /posts
 		axios
-		.get("http://localhost:8800/api/posts", { withCredentials:true})
+		.get("http://localhost:8800/api/posts/all", { withCredentials:true})
 		.then(function (response) {
 			setPosts(response.data);
 			console.log(response.data);

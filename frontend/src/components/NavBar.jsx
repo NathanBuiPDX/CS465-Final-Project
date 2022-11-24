@@ -27,7 +27,6 @@ const NavBar = () => {
 	const handleSearchClick = (event, userID) => {
 		event.preventDefault();
 		try {
-			console.log('userID: ', userID);
 			history.push(`/user/${userID}`);
 		} catch (err) {
 			window.alert('ERROR: ', err.message);

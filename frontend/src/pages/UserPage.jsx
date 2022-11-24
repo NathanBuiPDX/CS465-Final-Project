@@ -33,40 +33,31 @@ const UserPage = (props) => {
 	const [updateSection, setUpdateSection] = useState('');
 	const { userID } = useParams();
 	console.log('USERID: ', userID);
-
+	
 	useEffect(() => {
 		let cookie = getCookie('userId');
 		if (!cookie) history.push('/login');
 	}, [])
 
-	useEffect(() => {
-		//TODO: call GET /posts instead of context.posts and GET /:userID instead of context.users filter
-		let posts = context.posts.filter((post) => post.user_id === userID);
-		let user = context.users.find((user) => {console.log("USER: ", user); return user._id === userID});
-		console.log('USER: ', user);
-
-		setUser(user);
-		setUserPosts(posts);
+	useEffect(async () => {
+		if (userID) {
+			try{
+				let posts = await axios.get("http://localhost:8800/api/posts/users/" + userID, {withCredentials:true});
+				let user = await axios.get("http://localhost:8800/api/users/" + userID, {withCredentials:true});
+				console.log('USER: ', user.data);
+		
+				setUser(user.data);
+				setUserPosts(posts.data);
+			}
+			catch(err) {
+				window.alert("Can not fetch User data");
+				console.log(err);
+			}
+		} else history.push('/');
 	}, [userID]);
 
-	const handleUpdateProfile = (event) => {
+	const handleUpdateProfile = async (event) => {
 		event.preventDefault();
-		axios
-      .put("http://localhost:8800/", {
-        withCredentials: true,
-        username: nameRef.current.value,
-        full_name: fullNameRef.current.value,
-        gender: genderRef.current.value,
-        about: aboutRef.current.value,
-      })
-      .then(function (response) {
-        setUser(response.data);
-        console.log("Fetching users from context: ", response.data);
-      })
-      .catch(function (error) {
-        window.alert("ERROR fetching User from context:", error);
-        console.log(error);
-      });
 		event.stopPropagation();
 		let updateUser = { ...user };
 
@@ -78,17 +69,17 @@ const UserPage = (props) => {
 			updateUser.about = aboutRef.current.value;
 			console.log('UPDATING USER INFO: ', updateUser);
 		}
-		if (updateSection === COVER_IMAGE) {
-			//TODO : change this to file when doing PUT
-			// updateUser.cover_url = file;
-			updateUser.cover_url = imagePreview;
-		}
-		if (updateSection === PROFILE_IMAGE) {
-			//TODO : change this to file when doing PUT
-			// updateUser.image_url = file;
-			updateUser.icon_url = imagePreview;
+		else{
+			if (updateSection === COVER_IMAGE) {
+				updateUser.cover_url = file;
+			}
+			if (updateSection === PROFILE_IMAGE) {
+				updateUser.icon_url = file;
+			}
 		}
 		setUser(updateUser);
+		if (imagePreview) URL.revokeObjectURL(imagePreview);
+		setFile(null);
 		setImagePreview(null);
 		context.modifyCurrentUser(updateUser);
 		console.log('Updated User Profile!');
@@ -108,26 +99,25 @@ const UserPage = (props) => {
 	};
 
 	const handleCreatePost = (data) => {
-			axios
-        .post("http://localhost:8800/api/post", {
-          withCredentials: true,
-          image_url: data.image_url,
-          caption: data.caption,
-          like_count: '0',
-          comments_count: data.comments_count,
-        })
+		console.log("NewsFeed file Receiving NEW POST: ", data);
+		//call POST /post then get post again
+		axios
+        .post("http://localhost:8800/api/posts", {
+			image_url: data.image_url,
+			caption: data.caption,
+			like_count: '0',
+			comments_count: data.comments_count,
+        }, {withCredentials: true})
         .then(function (response) {
           setUser(response.data);
           console.log("Fetching users from context: ", response.data);
+		  setUserPosts(prevPosts => [data,...prevPosts]);
         })
         .catch(function (error) {
-          window.alert("ERROR fetching User from context:", error);
+          window.alert("ERROR creating post from userpage: ", error);
           console.log(error);
         });
 
-		console.log("NewsFeed file Receiving NEW POST: ", data);
-		//call POST /post then get post again
-		setUserPosts(prevPosts => [data,...prevPosts]);
 
 	}
 
@@ -246,7 +236,7 @@ const UserPage = (props) => {
 						<div className="userPost col-12 col-md-8">
 							{userID === context.currentUser._id && <PostCreation submitPost={handleCreatePost} />}
 							{userPosts.map((post) => (
-								<Post key={post._id || post.id} post={post} deletePost={handleDeletePost} />
+								<Post key={post._id + "userpage"} post={post} deletePost={handleDeletePost} />
 							))}
 						</div>
 					</div>

@@ -22,7 +22,6 @@ const Bagde = ({ post }) => {
 
 	const submitDuration = (submittedTime) => {
 		//Temp
-		console.log('Bagde DATE RECEIVED: ', submittedTime);
 		let timeSubmitted = new Date(submittedTime);
 		let diffTime = new Date().getTime() - timeSubmitted.getTime();
 		return msToDuration(diffTime);
