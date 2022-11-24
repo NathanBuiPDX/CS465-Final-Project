@@ -7,9 +7,10 @@ import { InfoContext } from '../components/InfoProvider';
 import PostCreation from '../components/PostCreation';
 import Post from '../components/Post';
 import NavBar from '../components/NavBar';
-import { Edit, CameraAlt } from '@material-ui/icons';
+import { Edit, CameraAlt, DnsSharp } from '@material-ui/icons';
 import { getCookie } from '../utilities/Helpers';
 import { useHistory } from 'react-router-dom';
+import axios from "axios";
 
 const PROFILE_IMAGE = 'Profile Image';
 const COVER_IMAGE = 'Cover Image';
@@ -50,6 +51,22 @@ const UserPage = (props) => {
 
 	const handleUpdateProfile = (event) => {
 		event.preventDefault();
+		axios
+      .put("http://localhost:8800/", {
+        withCredentials: true,
+        username: nameRef.current.value,
+        full_name: fullNameRef.current.value,
+        gender: genderRef.current.value,
+        about: aboutRef.current.value,
+      })
+      .then(function (response) {
+        setUser(response.data);
+        console.log("Fetching users from context: ", response.data);
+      })
+      .catch(function (error) {
+        window.alert("ERROR fetching User from context:", error);
+        console.log(error);
+      });
 		event.stopPropagation();
 		let updateUser = { ...user };
 
@@ -91,6 +108,22 @@ const UserPage = (props) => {
 	};
 
 	const handleCreatePost = (data) => {
+			axios
+        .post("http://localhost:8800/api/post", {
+          withCredentials: true,
+          image_url: data.image_url,
+          caption: data.caption,
+          like_count: '0',
+          comments_count: data.comments_count,
+        })
+        .then(function (response) {
+          setUser(response.data);
+          console.log("Fetching users from context: ", response.data);
+        })
+        .catch(function (error) {
+          window.alert("ERROR fetching User from context:", error);
+          console.log(error);
+        });
 
 		console.log("NewsFeed file Receiving NEW POST: ", data);
 		//call POST /post then get post again
@@ -103,11 +136,23 @@ const UserPage = (props) => {
 			console.log("UserPage Receiving DELETED POSTID: ", postID);
 			//TODO: call delete then call getPosts() again
 			let tempPosts = [...userPosts];
-			tempPosts = tempPosts.filter(post => post.id !== postID);
+			tempPosts = tempPosts.filter(post => post._id !== postID);
 			setUserPosts(tempPosts);
 		} catch(err) {
 			window.alert("ERROR CREATING NEW POST PROFILE PAGE:", err);
 		}
+					axios
+            .delete(`http://localhost:8800/api/:${postID}`, {
+              withCredentials: true
+            })
+            .then(function (response) {
+              setUser(response.data);
+              console.log("Deleted: ", response.data);
+            })
+            .catch(function (error) {
+              window.alert("ERROR deleting post:", error);
+              console.log(error);
+            });
 	}
 
 	return (

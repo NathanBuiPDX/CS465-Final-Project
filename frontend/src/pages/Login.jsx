@@ -25,7 +25,7 @@ const Login = () => {
               history.push("/");
             })
             .catch(function (error) {
-              window.alert("unable to register");
+              window.alert("unable to login");
               console.log(error);
             });
   };

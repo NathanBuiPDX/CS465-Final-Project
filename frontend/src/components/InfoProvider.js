@@ -39,6 +39,8 @@ const InfoProvider = ({ children }) => {
 				window.alert("ERROR fetching current user from context:", error);
 				console.log(error);
 			});
+
+			
 		}
 	}, [cookie])
 
@@ -54,6 +56,9 @@ const InfoProvider = ({ children }) => {
 	const modifyCurrentUser = (currentUser) => {
 		console.log("Modifying Current User: ", currentUser);
 		setCurrentUser(currentUser);
+
+
+		
 	};
 
 	return (
