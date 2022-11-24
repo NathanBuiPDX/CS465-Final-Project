@@ -6,8 +6,7 @@ import { ThumbUp } from '@material-ui/icons';
 import Comment from './Comment';
 import { MoreHoriz } from '@material-ui/icons';
 import CommentCreation from './CommentCreation';
-import { useRef } from 'react';
-
+import axios from 'axios';
 const Post = ({ post: initialPost, deletePost }) => {
 	const context = useContext(InfoContext);
 	const [post, setPost] = useState(initialPost);
@@ -22,23 +21,38 @@ const Post = ({ post: initialPost, deletePost }) => {
 	const [viewComment, setViewComment] = useState(false);
 	const currentUser = context.currentUser;
 
-	useEffect(() => {
-		let comments = context.comments.filter(
-			(comment) => comment.post_id === post.id
-		);
-		setComments(comments);
+	useEffect( async () => {
+		try{
+			let comments = await axios.get("http://localhost:8800/api/comments/posts/" + initialPost._id, {withCredentials: true});
+			setComments(comments.data);
+			let liked = await axios.get("http://localhost:8800/api/likes/posts/" + initialPost._id, {withCredentials: true});
+			console.log("LIKE? ", liked.data, typeof liked.data)
+			setLike(liked.data);
+		} catch(err) {
+			window.alert("Can not get post comment");
+			console.log(err);
+		}
 		setCaption(initialPost.caption);
+		setPost(initialPost);
 	}, [initialPost]);
 
-	const handleLikeClick = (event) => {
+	const handleLikeClick = async (event) => {
 		event.preventDefault();
-		setLike((prevState) => {
-			//check and delete/create the like object depends on the user's click
-			return !prevState;
-		});
-		setLikeCount((prevLikeCount) =>
-			!like ? ++prevLikeCount : --prevLikeCount
-		);
+		try{
+			await axios.post("http://localhost:8800/api/likes", {post_id: initialPost._id}, {withCredentials: true})
+			setLike((prevState) => {
+				//check and delete/create the like object depends on the user's click
+				return !prevState;
+			});
+			setLikeCount((prevLikeCount) =>
+				!like ? ++prevLikeCount : --prevLikeCount
+			);
+			console.log('like!');
+		} 
+		catch(err) {
+			window.alert("Like feature is down!!!!");
+			console.log(err);
+		}
 	};
 
 	const handleUpdateImage = (event) => {
@@ -55,45 +69,45 @@ const Post = ({ post: initialPost, deletePost }) => {
 
 	const handleUpdatePost = (event) => {
 		event.preventDefault();
-		let prevPost = { ...post };
-		setTimeout(() => {
-			// get the post again
-			let updatePost = {
-				caption: caption,
-			};
-			if (file) updatePost.image_url = file;
-			
-			console.log('UPDATING POST: ', updatePost);
-			setPost({
-				...prevPost,
-				caption: updatePost.caption,
-				image_url: imagePreview,
-			});
-			URL.revokeObjectURL(imagePreview);
+		let currentPost = { ...post };
+		// get the post again
+		let updatePost = {
+			caption: caption,
+		};
+		if (file) updatePost.image_url = file;
+		
+		axios
+		.put("http://localhost:8800/api/posts/" + currentPost._id, updatePost,  { withCredentials:true})
+		.then(function (response) {
+			setPost(response.data);
+			imagePreview && URL.revokeObjectURL(imagePreview);
 			setImagePreview(null);
-			console.log('Post Updated!');
-		}, 2000);
+			setFile(null);
+			console.log(response.data);
+		})
+		.catch(function (error) {
+			window.alert("ERROR CREATING NEW POST NEWSFEED PAGE:", error);
+			console.log(error);
+		});
 	};
 
 	const handleDeletePost = (event) => {
 		event.preventDefault();
-		deletePost(post.id);
+		deletePost(post._id);
 	};
 
-	const handleSubmitComment = (data) => {
+	const handleSubmitComment = async (data) => {
 		try {
 			let newComment = {
-			//id must be created automatically
-			id: Math.random(),
-			post_id: post.id,
-			user_id: currentUser.id,
+			post_id: post._id,
 			text: data,
 		};
-		console.log('POST DATA RECIVED NEW COMMENT: ', newComment);
-		setComments((prevComments) => [newComment, ...prevComments]);
+		const returnedComment = await axios.post("http://localhost:8800/api/comments", newComment, {withCredentials: true});
+		setComments((prevComments) => [returnedComment.data, ...prevComments]);
 		setCommentCount(prevComments => ++prevComments);
 		} catch(err) {
 			window.alert("ERROR WHEN CREATING NEW COMMENT: ", err);
+			console.log(err);
 		}
 	};
 
@@ -105,7 +119,7 @@ const Post = ({ post: initialPost, deletePost }) => {
 		<div className="post bg-light">
 			<div className="postTop d-flex justify-content-between">
 				<Bagde post={post} />
-				{post.user_id === currentUser.id && (
+				{post.user_id === currentUser._id && (
 					<div className="dropdown">
 						<button
 							className="btn btn-light"
@@ -173,7 +187,7 @@ const Post = ({ post: initialPost, deletePost }) => {
 												onChange={handleUpdateImage}
 											/>
 										</div>
-										{!imagePreview && (
+										{!imagePreview && file && (
 											<img
 												src={post.image_url}
 												className="imageModal"
@@ -198,7 +212,7 @@ const Post = ({ post: initialPost, deletePost }) => {
 										</button>
 										<button
 											type="button"
-											className="btn btn-primary"
+											className="btn btn-primary m-0"
 											data-bs-dismiss="modal"
 											onClick={handleUpdatePost}
 										>
@@ -246,7 +260,7 @@ const Post = ({ post: initialPost, deletePost }) => {
 					<Fragment>
 						<CommentCreation submitComment={handleSubmitComment} />
 						{comments.map((comment) => (
-							<Comment key={comment.id} comment={comment} />
+							<Comment key={comment._id + "comment"} comment={comment} />
 						))}
 					</Fragment>
 				)}

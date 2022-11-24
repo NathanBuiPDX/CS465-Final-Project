@@ -4,6 +4,8 @@ import { Block, Photo } from '@material-ui/icons';
 import { InfoContext } from './InfoProvider';
 import { useEffect } from 'react';
 
+const DEFAULT_PROFILE_IMG = process.env.REACT_APP_DEFAULT_ICON;
+
 const PostCreation = ({submitPost}) => {
 	const context = useContext(InfoContext);
 	const content = useRef('');
@@ -31,32 +33,31 @@ const PostCreation = ({submitPost}) => {
 
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
+
 		setIsUpdating(true);
 		console.log('Form Submitted with content: ', content.current.value);
-		setTimeout(() => {
-			try {
-				let newPost = {
-					user_id: currentUser.id,
-					post_time: new Date().toISOString(),
-					//TODO: uncomment the below line
-					// image_url:file,
-					image_url: imagePreview,
-					caption: content.current.value,
-					like_count: 0,
-					comments_count:0
-				};
-				submitPost(newPost);
-				setIsUpdating(false);
-				content.current.value = '';
-				setFile(null);
-				setImagePreview(null);
-			} catch (err) {
-				window.alert('Can not Post a new post!');
-				console.log(err);
-				setIsUpdating(false);
-			}
-			// URL.revokeObjectURL(imagePreview);
-		}, 2000);
+		try {
+			let newPost = {
+				user_id: currentUser.id,
+				post_time: new Date().toISOString(),
+				image_url:file,
+				caption: content.current.value,
+				like_count: 0,
+				comments_count:0
+			};
+			submitPost(newPost);
+			setIsUpdating(false);
+			content.current.value = '';
+			setFile(null);
+			setImagePreview(null);
+		} catch (err) {
+			window.alert('Can not Post a new post!');
+			console.log(err);
+			setIsUpdating(false);
+		}
+		URL.revokeObjectURL(imagePreview);
+	
+		
 	};
 
 	return (
@@ -64,7 +65,7 @@ const PostCreation = ({submitPost}) => {
 			<div className="userCaption">
 				<label htmlFor="caption">
 					<img
-						src={currentUser.icon_url}
+						src={currentUser.icon_url || DEFAULT_PROFILE_IMG}
 						alt={`${currentUser.icon_url} from PostCreation`}
 						className="userIcon"
 					/>
@@ -112,7 +113,7 @@ const PostCreation = ({submitPost}) => {
 					)}
 					<button
 						type="submit"
-						className="btn btn-primary postButton"
+						className="btn btn-primary postButton m-0"
 						disabled={isUpdating}
 					>
 						{isUpdating ? 'Posting' : 'Post'}

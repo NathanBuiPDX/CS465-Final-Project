@@ -1,0 +1,46 @@
+.formContainer {
+  background-color: #427bb5;
+  margin-top: 10%;
+  padding: 20px;
+}
+
+.formContainer h1 {
+  font-size: 1.6em;
+  text-align: center;
+}
+
+.formContainer form {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8em;
+  margin-top: 10%;
+  margin-bottom: 50%;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+.btn.btn-primary {
+  background-color: #0051a8;
+  margin-top: 20px;
+}
+
+
+.loginFormContainer {
+  background-color: #427bb5;
+  padding: 20px;
+}
+
+.loginFormContainer form {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8em;
+  margin-top: 10%;
+  margin-bottom: 50%;
+  padding: 20px;
+
+  background-color: #f8f9fa;
+}
+
+.loginFormContainer {
+  background-color: #427bb5;
+}

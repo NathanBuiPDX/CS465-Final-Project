@@ -7,7 +7,10 @@ import { InfoContext } from '../components/InfoProvider';
 import PostCreation from '../components/PostCreation';
 import Post from '../components/Post';
 import NavBar from '../components/NavBar';
-import { Edit, CameraAlt } from '@material-ui/icons';
+import { Edit, CameraAlt, DnsSharp } from '@material-ui/icons';
+import { getCookie } from '../utilities/Helpers';
+import { useHistory } from 'react-router-dom';
+import axios from "axios";
 
 const PROFILE_IMAGE = 'Profile Image';
 const COVER_IMAGE = 'Cover Image';
@@ -16,6 +19,7 @@ const DEFAULT_PROFILE_IMG = process.env.REACT_APP_DEFAULT_ICON;
 const DEFAULT_COVER_IMG = process.env.REACT_APP_DEFAULT_COVER;
 console.log('DEFAULT COVER IMG: ', DEFAULT_COVER_IMG);
 const UserPage = (props) => {
+	const history = useHistory();
 	const context = useContext(InfoContext);
 	const [userPosts, setUserPosts] = useState([]);
 	const [user, setUser] = useState({});
@@ -29,20 +33,30 @@ const UserPage = (props) => {
 	const [updateSection, setUpdateSection] = useState('');
 	const { userID } = useParams();
 	console.log('USERID: ', userID);
-
+	
 	useEffect(() => {
-		//TODO: call GET /posts instead of context.posts and GET /:userID instead of context.users filter
-		let posts = context.posts.filter((post) => post.user_id === userID);
-		let user = context.users.find((user) => user.id === userID);
-		console.log('USER: ', user);
-		user.icon_url = user.icon_url ? user.icon_url : DEFAULT_PROFILE_IMG;
-		user.cover_url = user.cover_url ? user.cover_url : DEFAULT_COVER_IMG;
+		let cookie = getCookie('userId');
+		if (!cookie) history.push('/login');
+	}, [])
 
-		setUser(user);
-		setUserPosts(posts);
+	useEffect(async () => {
+		if (userID) {
+			try{
+				let posts = await axios.get("http://localhost:8800/api/posts/users/" + userID, {withCredentials:true});
+				let user = await axios.get("http://localhost:8800/api/users/" + userID, {withCredentials:true});
+				console.log('USER: ', user.data);
+		
+				setUser(user.data);
+				setUserPosts(posts.data);
+			}
+			catch(err) {
+				window.alert("Can not fetch User data");
+				console.log(err);
+			}
+		} else history.push('/');
 	}, [userID]);
 
-	const handleUpdateProfile = (event) => {
+	const handleUpdateProfile = async (event) => {
 		event.preventDefault();
 		event.stopPropagation();
 		let updateUser = { ...user };
@@ -55,17 +69,17 @@ const UserPage = (props) => {
 			updateUser.about = aboutRef.current.value;
 			console.log('UPDATING USER INFO: ', updateUser);
 		}
-		if (updateSection === COVER_IMAGE) {
-			//TODO : change this to file when doing PUT
-			// updateUser.cover_url = file;
-			updateUser.cover_url = imagePreview;
-		}
-		if (updateSection === PROFILE_IMAGE) {
-			//TODO : change this to file when doing PUT
-			// updateUser.image_url = file;
-			updateUser.icon_url = imagePreview;
+		else{
+			if (updateSection === COVER_IMAGE) {
+				updateUser.cover_url = file;
+			}
+			if (updateSection === PROFILE_IMAGE) {
+				updateUser.icon_url = file;
+			}
 		}
 		setUser(updateUser);
+		if (imagePreview) URL.revokeObjectURL(imagePreview);
+		setFile(null);
 		setImagePreview(null);
 		context.modifyCurrentUser(updateUser);
 		console.log('Updated User Profile!');
@@ -85,17 +99,26 @@ const UserPage = (props) => {
 	};
 
 	const handleCreatePost = (data) => {
-		try{
-			//TODO remove this random number
-			data.id = Math.random();
-			console.log("NewsFeed file Receiving NEW POST: ", data);
-			//call POST /post then get post again
-			// getPosts();
-			//TODO: remove this one
-			setUserPosts(prevPosts => [data,...prevPosts]);
-		} catch(err) {
-			window.alert("ERROR CREATING NEW POST PROFILE PAGE:", err);
-		}
+		console.log("NewsFeed file Receiving NEW POST: ", data);
+		//call POST /post then get post again
+		axios
+        .post("http://localhost:8800/api/posts", {
+			image_url: data.image_url,
+			caption: data.caption,
+			like_count: '0',
+			comments_count: data.comments_count,
+        }, {withCredentials: true})
+        .then(function (response) {
+          setUser(response.data);
+          console.log("Fetching users from context: ", response.data);
+		  setUserPosts(prevPosts => [data,...prevPosts]);
+        })
+        .catch(function (error) {
+          window.alert("ERROR creating post from userpage: ", error);
+          console.log(error);
+        });
+
+
 	}
 
 	const handleDeletePost = (postID) => {
@@ -103,11 +126,23 @@ const UserPage = (props) => {
 			console.log("UserPage Receiving DELETED POSTID: ", postID);
 			//TODO: call delete then call getPosts() again
 			let tempPosts = [...userPosts];
-			tempPosts = tempPosts.filter(post => post.id !== postID);
+			tempPosts = tempPosts.filter(post => post._id !== postID);
 			setUserPosts(tempPosts);
 		} catch(err) {
 			window.alert("ERROR CREATING NEW POST PROFILE PAGE:", err);
 		}
+					axios
+            .delete(`http://localhost:8800/api/:${postID}`, {
+              withCredentials: true
+            })
+            .then(function (response) {
+              setUser(response.data);
+              console.log("Deleted: ", response.data);
+            })
+            .catch(function (error) {
+              window.alert("ERROR deleting post:", error);
+              console.log(error);
+            });
 	}
 
 	return (
@@ -118,16 +153,16 @@ const UserPage = (props) => {
 					<div className="userImages">
 						<div style={{ width: '100%' }}>
 							<img
-								src={user.cover_url}
+								src={user?.cover_url || DEFAULT_COVER_IMG}
 								className="coverImg"
 								alt={`profile page user icon ${user.icon_url}`}
 							/>
 							<img
-								src={user.icon_url}
+								src={user?.icon_url || DEFAULT_PROFILE_IMG}
 								className="profileImg"
 								alt={`profile page user icon ${user.icon_url}`}
 							/>
-							{userID === context.currentUser.id && (
+							{userID === context.currentUser._id && (
 								<button
 									className="btn btn-light py-1 editCoverImgButton"
 									data-bs-toggle="modal"
@@ -138,7 +173,7 @@ const UserPage = (props) => {
 									<span className="noDisplay">Edit Cover Picture</span>
 								</button>
 							)}
-							{userID === context.currentUser.id && (
+							{userID === context.currentUser._id && (
 								<button
 									id="iconPicture"
 									className="btn btn-dark rounded-circle p-1 editProfileImgButton"
@@ -163,7 +198,7 @@ const UserPage = (props) => {
 						<div className="userInfo col-12 col-md-4 bg-light">
 							<div className="about">
 								About {user.name}
-								{userID === context.currentUser.id && (
+								{userID === context.currentUser._id && (
 									<button
 										data-bs-toggle="modal"
 										data-bs-target="#updateProfileModal"
@@ -199,9 +234,9 @@ const UserPage = (props) => {
 						</div>
 
 						<div className="userPost col-12 col-md-8">
-							{userID === context.currentUser.id && <PostCreation submitPost={handleCreatePost} />}
+							{userID === context.currentUser._id && <PostCreation submitPost={handleCreatePost} />}
 							{userPosts.map((post) => (
-								<Post key={post.id} post={post} deletePost={handleDeletePost} />
+								<Post key={post._id + "userpage"} post={post} deletePost={handleDeletePost} />
 							))}
 						</div>
 					</div>

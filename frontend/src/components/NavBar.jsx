@@ -12,22 +12,21 @@ const NavBar = () => {
 	const history = useHistory();
 	const context = useContext(InfoContext);
 	const [user, setUser] = useState(context.currentUser);
-	const [recentlySearch, setRecentlySearch] = useState(context.recentlySearch);
+	const [recentlySearch, setRecentlySearch] = useState([]);
 	
 	useEffect(() => {
 		setUser(context.currentUser);
 	}, [context.currentUser]);
 
 	useEffect(() => {
-		setRecentlySearch(context.recentlySearch);
-	}, [context.recentlySearch]);
+		setRecentlySearch(context.users);
+	}, [context.users]);
 
 
 
 	const handleSearchClick = (event, userID) => {
 		event.preventDefault();
 		try {
-			console.log('userID: ', userID);
 			history.push(`/user/${userID}`);
 		} catch (err) {
 			window.alert('ERROR: ', err.message);
@@ -36,6 +35,7 @@ const NavBar = () => {
 
 	const handleLogout = (event) => {
 		console.log("Logging out");
+		document.cookie = "userId=; max-age=0";
 		history.push('/login');
 	}
 
@@ -63,9 +63,9 @@ const NavBar = () => {
 						{recentlySearch.map((e) => (
 							<li
 								className="dropdown-item"
-								value={e.id}
-								key={e.id}
-								onClick={(event) => handleSearchClick(event, e.id)}
+								value={e._id}
+								key={e._id}
+								onClick={(event) => handleSearchClick(event, e._id)}
 							>
 								<UserFigure user={e} color={'black'} />
 							</li>
