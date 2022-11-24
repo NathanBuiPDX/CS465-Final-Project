@@ -27,13 +27,20 @@ router.put('/:postId', async (req, res) => {
         const cookies = cookie.fetchCookies(req);
         const postId = req.params.postId;
         if (cookies['userId']) {
-            const post = await Post.findById(postId);
+            let post = await Post.findById(postId);
             if (!post) {
                 res.status(404).json(`Post not found`);
                 return;
             }
             await Post.findByIdAndUpdate({ _id: postId }, { $set: req.body });
-            res.status(200).json('Post Updated');
+            post = await Post.findById(postId);
+            if (!post) {
+                res.status(404).json(`Post not found`);
+                return;
+            }
+            // eslint-disable-next-line no-unused-vars
+            const { __v, ...other } = post._doc;
+            res.status(200).json(other);
         } else {
             res.status(403).json('Unauthorized user');
         }
