@@ -10,7 +10,6 @@ import { getCookie } from '../utilities/Helpers';
 import { useHistory } from 'react-router-dom';
 const NewsFeed = () => {
 	const history = useHistory();
-	const context = useContext(InfoContext);
 	const [posts, setPosts] = useState([]);
 	const getPosts = () => {
 		// Calling GET /posts
@@ -33,7 +32,7 @@ const NewsFeed = () => {
 	}, [])
 
 	const handleCreatePost = (data) => {
-		console.log("NewsFeed file Receiving NEW POST: ", data);
+		console.log("NewsFeed file Receiving NEW POST: ", data.imageFile);
 		axios
 		.post("http://localhost:8800/api/posts", data, { withCredentials:true})
 		.then(function (response) {

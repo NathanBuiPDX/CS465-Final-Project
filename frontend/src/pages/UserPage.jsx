@@ -60,29 +60,36 @@ const UserPage = (props) => {
 		event.preventDefault();
 		event.stopPropagation();
 		let updateUser = { ...user };
-
-		if (updateSection === ABOUT) {
-			updateUser.name = nameRef.current.value;
-			updateUser.full_name = fullNameRef.current.value;
-			updateUser.gender = genderRef.current.value;
-			updateUser.dob = dobRef.current.value;
-			updateUser.about = aboutRef.current.value;
-			console.log('UPDATING USER INFO: ', updateUser);
-		}
-		else{
-			if (updateSection === COVER_IMAGE) {
-				updateUser.cover_url = file;
+		let imageUpdate = new FormData();
+		try {
+			if (updateSection === ABOUT) {
+				updateUser.name = nameRef.current.value;
+				updateUser.full_name = fullNameRef.current.value;
+				updateUser.gender = genderRef.current.value;
+				updateUser.dob = dobRef.current.value;
+				updateUser.about = aboutRef.current.value;
+				console.log('UPDATING USER INFO: ', updateUser);
+				updateUser = await axios.put("http://localhost:8800/api/users", updateUser, { withCredentials:true});
 			}
-			if (updateSection === PROFILE_IMAGE) {
-				updateUser.icon_url = file;
+			else{
+				if (updateSection === COVER_IMAGE) {
+					imageUpdate.append("coverFile", file);
+				}
+				if (updateSection === PROFILE_IMAGE) {
+					imageUpdate.append("iconFile", file);
+				}
 			}
+			setUser(updateUser.data);
+			if (imagePreview) URL.revokeObjectURL(imagePreview);
+			setFile(null);
+			setImagePreview(null);
+			context.modifyCurrentUser(updateUser);
+			console.log('Updated User Profile!');
 		}
-		setUser(updateUser);
-		if (imagePreview) URL.revokeObjectURL(imagePreview);
-		setFile(null);
-		setImagePreview(null);
-		context.modifyCurrentUser(updateUser);
-		console.log('Updated User Profile!');
+		catch(err) {
+			window.alert("ERROR updating user failed");
+			console.log(err);
+		}
 	};
 
 	const handleImageUpdate = (event) => {
@@ -99,15 +106,10 @@ const UserPage = (props) => {
 	};
 
 	const handleCreatePost = (data) => {
-		console.log("NewsFeed file Receiving NEW POST: ", data);
+		console.log("NewsFeed file Receiving NEW POST: ", data.imageFile);
 		//call POST /post then get post again
 		axios
-        .post("http://localhost:8800/api/posts", {
-			image_url: data.image_url,
-			caption: data.caption,
-			like_count: '0',
-			comments_count: data.comments_count,
-        }, {withCredentials: true})
+        .post("http://localhost:8800/api/posts", data, {withCredentials: true})
         .then(function (response) {
           setUser(response.data);
           console.log("Fetching users from context: ", response.data);
@@ -350,7 +352,7 @@ const UserPage = (props) => {
 													onChange={handleImageUpdate}
 												/>
 											</div>
-											{!imagePreview && (
+											{!imagePreview && (user.icon_url || user.cover_url) && (
 												<img
 													src={
 														updateSection === PROFILE_IMAGE
@@ -381,7 +383,7 @@ const UserPage = (props) => {
 										</button>
 										<button
 											type="submit"
-											className="btn btn-primary"
+											className="btn btn-primary m-0"
 											data-bs-dismiss="modal"
 										>
 											Update

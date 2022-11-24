@@ -37,15 +37,15 @@ const PostCreation = ({submitPost}) => {
 		setIsUpdating(true);
 		console.log('Form Submitted with content: ', content.current.value);
 		try {
-			let newPost = {
-				user_id: currentUser.id,
-				post_time: new Date().toISOString(),
-				image_url:file,
-				caption: content.current.value,
-				like_count: 0,
-				comments_count:0
-			};
+			let newPost = new FormData();
+			newPost.append('user_id', currentUser._id);
+			newPost.append('caption', content.current.value);
+			newPost.append('like_count', 0);
+			newPost.append('comments_count', 0);
+
+			if (file) newPost.append('imageFile', file);
 			submitPost(newPost);
+			setFile(null);
 			setIsUpdating(false);
 			content.current.value = '';
 			setFile(null);

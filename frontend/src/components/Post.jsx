@@ -187,7 +187,7 @@ const Post = ({ post: initialPost, deletePost }) => {
 												onChange={handleUpdateImage}
 											/>
 										</div>
-										{!imagePreview && file && (
+										{!imagePreview && post.image_url && (
 											<img
 												src={post.image_url}
 												className="imageModal"
