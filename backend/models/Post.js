@@ -10,7 +10,6 @@ const PostSchema = new mongoose.Schema({
     caption: {
         type: String,
         max: 150,
-        required: true,
     },
     like_count: { type: Number, default: 0 },
     comments_count: { type: Number, default: 0 },
