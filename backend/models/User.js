@@ -37,6 +37,8 @@ const UserSchema = new mongoose.Schema({
         type: String,
         enum: ['male', 'female', 'other'], // check for given values
     },
+    cover_url:{        type: String,
+        max: 100, },
     date_of_birth: { type: Date },
     about: {
         type: String,

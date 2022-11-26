@@ -12,15 +12,15 @@ router.post("/",  async (req, res) => {
       req.body.user_id = cookies["userId"];
       // AWS S3 LOGIC
       // req.file.buffer is our image that we send to S3
-      const pic =  req?.file?.buffer;
+      const pic = req?.file?.buffer;
 
       console.log("FILE: ", pic);
       // post image to S3BUCKET if the user did include an image
       if (pic) {
-                var s3Object = await s3Function.setImage(pic);
-                // so we can store our s3Unique key in our DB
-                req.body.image_url = s3Object.key;
-        }
+        var s3Object = await s3Function.setImage(pic);
+        // so we can store our s3Unique key in our DB
+        req.body.image_url = s3Object.key;
+      }
       // DB LOGIC
       // this is where we store imageKey in DB
       const newPost = new Post(req.body);
@@ -30,10 +30,15 @@ router.post("/",  async (req, res) => {
 
       //if the pic is included, then extract the s3 URL and save it to image_url
       // store s3URL to frontEnd because we want to store the key in DB
+      // must check if picture is included in request
       if (pic) {
         const s3pic = s3Object.url;
-        other.image_url = s3pic
+        other.image_url = s3pic;
       }
+      //check if post objects ahve imageURl inside, if yes, call s3 function
+      //getSignedURL from s3, res.status(200).json(other);
+      //
+      
       res.status(200).json(other);
     } else {
       res.status(403).json("Unauthorized user");
@@ -50,6 +55,11 @@ router.put('/:postId', async (req, res) => {
         const cookies = cookie.fetchCookies(req);
         const postId = req.params.postId;
         if (cookies['userId']) {
+
+
+
+
+
           let post = await Post.findById(postId);
           if (!post) {
             res.status(404).json(`Post not found`);
@@ -63,12 +73,9 @@ router.put('/:postId', async (req, res) => {
             res.status(404).json(`Post not found`);
             return;
           }
-        
           // eslint-disable-next-line no-unused-vars
           const { __v, ...other } = post._doc;
           //return s3URL to frontEnd
-
-       
 
           res.status(200).json(other);
         } else {
@@ -165,12 +172,19 @@ router.delete('/:postId', async (req, res) => {
         const cookies = cookie.fetchCookies(req);
         const postId = req.params.postId;
         if (cookies['userId']) {
+            //delete image from S3 bucket first
+            const post = await Post.findById(postId);
+            console.log(post.image_url);
+            const deleted = await s3Function.deleteImage(post.image_url)
+            console.log(deleted)
             await Post.findByIdAndDelete(postId);
+            
             res.status(200).json('Post deleted');
         } else {
             res.status(403).json('Unauthorized user');
         }
     } catch (error) {
+        console.log(error)
         res.status(500).json(error);
     }
 });

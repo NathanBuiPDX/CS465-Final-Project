@@ -28,7 +28,7 @@ const {
   S3Client,
   GetObjectCommand,
   PutObjectCommand,
-  // DeleteObjectCommand,
+  DeleteObjectCommand,
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const s3Client = new S3Client({
@@ -68,6 +68,26 @@ s3Function.setImage = async function (pic) {
     return {url, key};
   } catch(err) {console.log("S3 ERROR: ", err)}
 }
+
+s3Function.deleteImage = async function (picToDelete) {
+  // this is our image we send to s3
+  try {
+    const key = picToDelete;
+
+    const deleteParams = {
+    Bucket: bucketName,
+    Key: key,
+  };
+  
+  console.log('S3 delete recievedKEY:', key)
+  await s3Client.send(new DeleteObjectCommand(deleteParams));
+
+  } catch (err) {
+    console.log("S3 ERROR: ", err);
+  }
+};
+
+
 
 
 // app.post("/upload", upload.single("picture"), async (req, res) => {
