@@ -69,6 +69,24 @@ s3Function.setImage = async function (pic) {
   } catch(err) {console.log("S3 ERROR: ", err)}
 }
 
+s3Function.getImage = async function (picToGet) {
+  // this is our image we send to s3
+  try {
+    const key = picToGet;
+    const getParams = new GetObjectCommand({
+      Bucket: bucketName,
+      Key: key,
+    });
+    console.log("S3 GET recievedKEY:", key);
+    const url = await getSignedUrl(s3Client, getParams, { expiresIn: 3600 });
+    console.log("S3 URL:  ", url);
+    return url
+  } catch (err) {
+    console.log("S3 ERROR: ", err);
+  }
+};
+
+
 s3Function.deleteImage = async function (picToDelete) {
   // this is our image we send to s3
   try {
