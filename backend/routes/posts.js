@@ -7,16 +7,16 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const s3Function = require('../s3helper/bucket')
 // WRITE A NEW POST BY CURRENT USE
-router.post("/", upload.single("picture"), async (req, res) => {
+router.post("/", upload.single('imageFile'), async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
     if (cookies["userId"]) {
       req.body.user_id = cookies["userId"];
-      
       // AWS S3 LOGIC
-      // req.body.imageFile is our image that we send to S3
-      const pic = req.body.imageFile;
-      console.log(req.body.imageFile);
+      // req.file.buffer is our image that we send to S3
+      const pic =  req.file.buffer;
+
+      console.log("FILE: ", pic);
       // post image to S3BUCKET
       if (pic) {
                 var s3Object = await s3Function.setImage(pic);
@@ -39,6 +39,7 @@ router.post("/", upload.single("picture"), async (req, res) => {
     }
   } catch (error) {
     res.status(500).json(error);
+    console.log(error)
   }
 });
 
