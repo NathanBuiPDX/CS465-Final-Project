@@ -73,11 +73,12 @@ const UserPage = (props) => {
 			}
 			else{
 				if (updateSection === COVER_IMAGE) {
-					imageUpdate.append("coverFile", file);
+					imageUpdate.append("imageFile", file);
 				}
 				if (updateSection === PROFILE_IMAGE) {
-					imageUpdate.append("iconFile", file);
+					imageUpdate.append("imageFile", file);
 				}
+				updateUser = await axios.put("http://localhost:8800/api/users/images", imageUpdate, { withCredentials:true});
 			}
 			setUser(updateUser.data);
 			if (imagePreview) URL.revokeObjectURL(imagePreview);

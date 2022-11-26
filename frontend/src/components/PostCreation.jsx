@@ -48,12 +48,14 @@ const PostCreation = ({submitPost}) => {
 			setFile(null);
 			setIsUpdating(false);
 			content.current.value = '';
-			setFile(null);
 			setImagePreview(null);
 		} catch (err) {
 			window.alert('Can not Post a new post!');
 			console.log(err);
+			setFile(null);
 			setIsUpdating(false);
+			content.current.value = '';
+			setImagePreview(null);
 		}
 		URL.revokeObjectURL(imagePreview);
 	

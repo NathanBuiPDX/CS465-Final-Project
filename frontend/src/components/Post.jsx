@@ -71,10 +71,9 @@ const Post = ({ post: initialPost, deletePost }) => {
 		event.preventDefault();
 		let currentPost = { ...post };
 		// get the post again
-		let updatePost = {
-			caption: caption,
-		};
-		if (file) updatePost.image_url = file;
+		let updatePost = new FormData();
+		if (caption !== currentPost.caption) updatePost.append("caption",caption)
+		if (file) updatePost.append("imageFile", file);
 		
 		axios
 		.put("http://localhost:8800/api/posts/" + currentPost._id, updatePost,  { withCredentials:true})
@@ -88,6 +87,9 @@ const Post = ({ post: initialPost, deletePost }) => {
 		.catch(function (error) {
 			window.alert("ERROR CREATING NEW POST NEWSFEED PAGE:", error);
 			console.log(error);
+			imagePreview && URL.revokeObjectURL(imagePreview);
+			setImagePreview(null);
+			setFile(null);
 		});
 	};
 
