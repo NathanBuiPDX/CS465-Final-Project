@@ -44,27 +44,29 @@ const s3Client = new S3Client({
 
 s3Function.setImage = async function (pic) {
   // this is our image we send to s3
-  const file = pic;
+  try {
+    const file = pic;
 
-  // generate uniqueKeyValue
-  const key = new Date().getISOString();
-  const uploadParams = {
-     Bucket: bucketName,
-    Body: file,
-    Key: key,
-    ContentType: file.mimetype,
-  };
-  await s3Client.send(new PutObjectCommand(uploadParams));
-
-    const getCommand = new GetObjectCommand({
+    // generate uniqueKeyValue
+    const key = new Date().toISOString();
+    const uploadParams = {
       Bucket: bucketName,
+      Body: file,
       Key: key,
-    });
+      ContentType: file.mimetype,
+    };
+    await s3Client.send(new PutObjectCommand(uploadParams));
 
-  // get bucket url so we can get image
-  const url = await getSignedUrl(s3Client, getCommand, { expiresIn: 3600 });
-  console.log(url);
-  return {url, key};
+      const getCommand = new GetObjectCommand({
+        Bucket: bucketName,
+        Key: key,
+      });
+
+    // get bucket url so we can get image
+    const url = await getSignedUrl(s3Client, getCommand, { expiresIn: 3600 });
+    console.log(url);
+    return {url, key};
+  } catch(err) {console.log("S3 ERROR: ", err)}
 }
 
 
