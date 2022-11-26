@@ -92,17 +92,14 @@ router.get("/all", async (req, res) => {
                 return;
             }
             console.log(postList);
-            postList.forEach(async (post) => {
+            await Promise.all(postList.map(async (post) => {
                 if (post.image_url) {
                     post.image_url = await s3Function.getImage(post.image_url);
                     console.log("getting images  ", post.image_url);
                 }
-            });
-            setTimeout(() => {
-                console.log(postList);
-                res.status(200).json(postList);
-            }, 3000);
-
+            }));
+            console.log(postList);
+            res.status(200).json(postList);
         } else {
             res.status(403).json("Unauthorized user");
         }
