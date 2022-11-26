@@ -32,7 +32,6 @@ const NewsFeed = () => {
 	}, [])
 
 	const handleCreatePost = (data) => {
-		console.log("NewsFeed file Receiving NEW POST: ", data.imageFile);
 		axios
 		.post("http://localhost:8800/api/posts", data, { withCredentials:true})
 		.then(function (response) {
