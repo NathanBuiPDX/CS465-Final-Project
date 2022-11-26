@@ -10,7 +10,7 @@ import NavBar from '../components/NavBar';
 import { Edit, CameraAlt, DnsSharp } from '@material-ui/icons';
 import { getCookie } from '../utilities/Helpers';
 import { useHistory } from 'react-router-dom';
-import axios from "axios";
+import axios from 'axios';
 
 const PROFILE_IMAGE = 'Profile Image';
 const COVER_IMAGE = 'Cover Image';
@@ -33,24 +33,29 @@ const UserPage = (props) => {
 	const [updateSection, setUpdateSection] = useState('');
 	const { userID } = useParams();
 	console.log('USERID: ', userID);
-	
+
 	useEffect(() => {
 		let cookie = getCookie('userId');
 		if (!cookie) history.push('/login');
-	}, [])
+	}, []);
 
 	useEffect(async () => {
 		if (userID) {
-			try{
-				let posts = await axios.get("http://localhost:8800/api/posts/users/" + userID, {withCredentials:true});
-				let user = await axios.get("http://localhost:8800/api/users/" + userID, {withCredentials:true});
+			try {
+				let posts = await axios.get(
+					'http://localhost:8800/api/posts/users/' + userID,
+					{ withCredentials: true }
+				);
+				let user = await axios.get(
+					'http://localhost:8800/api/users/' + userID,
+					{ withCredentials: true }
+				);
 				console.log('USER: ', user.data);
-		
+
 				setUser(user.data);
 				setUserPosts(posts.data);
-			}
-			catch(err) {
-				window.alert("Can not fetch User data");
+			} catch (err) {
+				window.alert('Can not fetch User data');
 				console.log(err);
 			}
 		} else history.push('/');
@@ -69,16 +74,24 @@ const UserPage = (props) => {
 				updateUser.dob = dobRef.current.value;
 				updateUser.about = aboutRef.current.value;
 				console.log('UPDATING USER INFO: ', updateUser);
-				updateUser = await axios.put("http://localhost:8800/api/users", updateUser, { withCredentials:true});
-			}
-			else{
+				updateUser = await axios.put(
+					'http://localhost:8800/api/users',
+					updateUser,
+					{ withCredentials: true }
+				);
+			} else {
 				if (updateSection === COVER_IMAGE) {
-					imageUpdate.append("imageFile", file);
+					imageUpdate.append('imageFile', file);
 				}
 				if (updateSection === PROFILE_IMAGE) {
-					imageUpdate.append("imageFile", file);
+					imageUpdate.append('imageFile', file);
 				}
-				updateUser = await axios.put("http://localhost:8800/api/users/images", imageUpdate, { withCredentials:true});
+				updateUser = await axios.put(
+					'http://localhost:8800/api/users/' +
+						(updateSection === COVER_IMAGE ? 'cover_image' : 'profile_image'),
+					imageUpdate,
+					{ withCredentials: true }
+				);
 			}
 			setUser(updateUser.data);
 			if (imagePreview) URL.revokeObjectURL(imagePreview);
@@ -86,9 +99,8 @@ const UserPage = (props) => {
 			setImagePreview(null);
 			context.modifyCurrentUser(updateUser);
 			console.log('Updated User Profile!');
-		}
-		catch(err) {
-			window.alert("ERROR updating user failed");
+		} catch (err) {
+			window.alert('ERROR updating user failed');
 			console.log(err);
 		}
 	};
@@ -107,46 +119,44 @@ const UserPage = (props) => {
 	};
 
 	const handleCreatePost = (data) => {
-		console.log("NewsFeed file Receiving NEW POST: ", data.imageFile);
+		console.log('NewsFeed file Receiving NEW POST: ', data.imageFile);
 		//call POST /post then get post again
 		axios
-        .post("http://localhost:8800/api/posts", data, {withCredentials: true})
-        .then(function (response) {
-          setUser(response.data);
-          console.log("Fetching users from context: ", response.data);
-		  setUserPosts(prevPosts => [data,...prevPosts]);
-        })
-        .catch(function (error) {
-          window.alert("ERROR creating post from userpage: ", error);
-          console.log(error);
-        });
-
-
-	}
+			.post('http://localhost:8800/api/posts', data, { withCredentials: true })
+			.then(function (response) {
+				setUser(response.data);
+				console.log('Fetching users from context: ', response.data);
+				setUserPosts((prevPosts) => [data, ...prevPosts]);
+			})
+			.catch(function (error) {
+				window.alert('ERROR creating post from userpage: ', error);
+				console.log(error);
+			});
+	};
 
 	const handleDeletePost = (postID) => {
-		try{
-			console.log("UserPage Receiving DELETED POSTID: ", postID);
+		try {
+			console.log('UserPage Receiving DELETED POSTID: ', postID);
 			//TODO: call delete then call getPosts() again
 			let tempPosts = [...userPosts];
-			tempPosts = tempPosts.filter(post => post._id !== postID);
+			tempPosts = tempPosts.filter((post) => post._id !== postID);
 			setUserPosts(tempPosts);
-		} catch(err) {
-			window.alert("ERROR CREATING NEW POST PROFILE PAGE:", err);
+		} catch (err) {
+			window.alert('ERROR CREATING NEW POST PROFILE PAGE:', err);
 		}
-					axios
-            .delete(`http://localhost:8800/api/:${postID}`, {
-              withCredentials: true
-            })
-            .then(function (response) {
-              setUser(response.data);
-              console.log("Deleted: ", response.data);
-            })
-            .catch(function (error) {
-              window.alert("ERROR deleting post:", error);
-              console.log(error);
-            });
-	}
+		axios
+			.delete(`http://localhost:8800/api/:${postID}`, {
+				withCredentials: true,
+			})
+			.then(function (response) {
+				setUser(response.data);
+				console.log('Deleted: ', response.data);
+			})
+			.catch(function (error) {
+				window.alert('ERROR deleting post:', error);
+				console.log(error);
+			});
+	};
 
 	return (
 		<>
@@ -222,24 +232,36 @@ const UserPage = (props) => {
 								<div className="infoLabel">Preffer Name:</div>
 								<div className="infoData">{user.name}</div>
 							</div>
-							{user.gender && <div className="infoRow">
-								<div className="infoLabel">Gender:</div>
-								<div className="infoData">{user.gender}</div>
-							</div>}
-							{user.dob && <div className="infoRow">
-								<div className="infoLabel">Date Of Birth:</div>
-								<div className="infoData">{user.dob}</div>
-							</div>}
-							{user.about && <div className="infoRow">
-								<div className="infoLabel">About Me:</div>
-								<div className="infoData">{user.about}</div>
-							</div>}
+							{user.gender && (
+								<div className="infoRow">
+									<div className="infoLabel">Gender:</div>
+									<div className="infoData">{user.gender}</div>
+								</div>
+							)}
+							{user.dob && (
+								<div className="infoRow">
+									<div className="infoLabel">Date Of Birth:</div>
+									<div className="infoData">{user.dob}</div>
+								</div>
+							)}
+							{user.about && (
+								<div className="infoRow">
+									<div className="infoLabel">About Me:</div>
+									<div className="infoData">{user.about}</div>
+								</div>
+							)}
 						</div>
 
 						<div className="userPost col-12 col-md-8">
-							{userID === context.currentUser._id && <PostCreation submitPost={handleCreatePost} />}
+							{userID === context.currentUser._id && (
+								<PostCreation submitPost={handleCreatePost} />
+							)}
 							{userPosts.map((post) => (
-								<Post key={post._id + "userpage"} post={post} deletePost={handleDeletePost} />
+								<Post
+									key={post._id + 'userpage'}
+									post={post}
+									deletePost={handleDeletePost}
+								/>
 							))}
 						</div>
 					</div>
