@@ -41,6 +41,7 @@ router.put("/cover_image", async (req, res) => {
         user.cover_url = s3Object.key;
         await User.findByIdAndUpdate({ _id: mongoId }, { $set: user });
         user.cover_url = s3Object.url;
+        if (user.icon_url) user.icon_url = await s3Function.getImage(user.icon_url);
         res.status(200).json(user);
       }
     }
@@ -72,6 +73,7 @@ router.put("/profile_image", async (req, res) => {
           user.icon_url = s3Object.key;
           await User.findByIdAndUpdate({ _id: mongoId }, { $set: user });
           user.icon_url = s3Object.url;
+          if (user.cover_url) user.cover_url = await s3Function.getImage(user.cover_url);
           res.status(200).json(user);
         }
       }
@@ -104,6 +106,8 @@ router.put("/", async (req, res) => {
         const user = await User.findById({ _id: mongoId });
         // eslint-disable-next-line no-unused-vars
         const { password, createdAt, updatedAt, __v, ...other } = user._doc;
+        if (other.icon_url) other.icon_url = await s3Function.getImage(other.icon_url);
+        if (other.cover_url) other.cover_url = await s3Function.getImage(other.cover_url);
         res.status(200).json(other);
       } catch (err) {
         res.status(500).json(err);

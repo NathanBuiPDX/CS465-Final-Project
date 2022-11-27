@@ -13,7 +13,6 @@ router.post("/", async (req, res) => {
       // AWS S3 LOGIC
       // req.file.buffer is our image that we send to S3
       const pic = req?.file?.buffer;
-      console.log("FILE: ", pic);
       // post image to S3BUCKET if the user did include an image
       if (pic) {
         var s3Object = await s3Function.setImage(pic);
@@ -62,8 +61,6 @@ router.put("/:postId", async (req, res) => {
       // AWS S3 LOGIC
       // req.file.buffer is our image that we send to S3
       const pic = req?.file?.buffer;
-
-      console.log("FILE: ", pic);
       // post image to S3BUCKET if the user did include an image
       if (pic) {
         var s3Object = await s3Function.setImage(pic);
@@ -82,8 +79,8 @@ router.put("/:postId", async (req, res) => {
       // eslint-disable-next-line no-unused-vars
       const { __v, ...other } = post._doc;
       //return s3URL to frontEnd
-            if (pic) {
-              const s3pic = s3Object.url;
+            if (pic || other.image_url) {
+              const s3pic = await s3Function.getImage(other.image_url);
               other.image_url = s3pic;
             }
 
@@ -93,6 +90,7 @@ router.put("/:postId", async (req, res) => {
     }
   } catch (error) {
     res.status(500).json(error);
+    console.log(error)
   }
 });
 
