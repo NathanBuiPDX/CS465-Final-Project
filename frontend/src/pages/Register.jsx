@@ -1,11 +1,9 @@
 import React, { useState, useRef } from "react";
 import "./styles.css";
 import { useHistory } from "react-router-dom";
-import axios from "axios"
+import axios from "axios";
 //call register endpoint when submitting the form
 const Register = () => {
-
-
   const history = useHistory();
   const usernameRef = useRef("");
   const passwordRef = useRef("");
@@ -18,8 +16,9 @@ const Register = () => {
   const femaleCheckBoxRef = useRef("");
   const otherCheckBoxRef = useRef("");
   const aboutMeRef = useRef("");
-  
- const handleImageUpload = (event) => {
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const handleImageUpload = (event) => {
     event.preventDefault();
     try {
       console.log("FILE: ", event.target.files[0]);
@@ -32,7 +31,6 @@ const Register = () => {
     }
   };
 
-  
   const handleFormRegister = (event) => {
     console.log("USERNAME: ", usernameRef.current.value);
     console.log("Password: ", passwordRef.current.value);
@@ -45,25 +43,28 @@ const Register = () => {
     console.log("otherCheckBox", otherCheckBoxRef.current.checked);
     console.log("aboutMe", aboutMeRef.current.value);
     event.preventDefault();
-    
 
-      axios
-        .post("http://localhost:8800/api/auth/register", {
-          username: usernameRef.current.value,
-          password: passwordRef.current.value,
-          name: prefNameRef.current.value,
-          full_name: fullNameRef.current.value,
-          email: emailAddressRef.current.value,
-          icon_url: profileFile,
-          about: aboutMeRef.current.value,
-        })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          window.alert("unable to register");
-          console.log(error);
-        });
+    let newUser = new FormData();
+    newUser.append("username", usernameRef.current.value);
+    newUser.append("password", passwordRef.current.value);
+    newUser.append("name", prefNameRef.current.value);
+    newUser.append("full_name", fullNameRef.current.value);
+    if (emailAddressRef.current.value)
+      newUser.append("email", emailAddressRef.current.value);
+    if (profileFile) newUser.append("imageFile", profileFile);
+
+    if (aboutMeRef.current.value) newUser.append(aboutMeRef.current.value);
+
+    axios
+      .post("http://localhost:8800/api/auth/register", newUser
+      )
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        window.alert("unable to register");
+        console.log(error);
+      });
   };
   const handleFormLogin = (event) => {
     event.preventDefault();
@@ -72,7 +73,10 @@ const Register = () => {
   return (
     <div className="row justify-content-center align-items-center formContainer">
       <div>
-        <form className="border border-dark rounded" onSubmit={handleFormRegister}>
+        <form
+          className="border border-dark rounded"
+          onSubmit={handleFormRegister}
+        >
           <h1 className="mb-2">
             <strong>REGISTER</strong>
           </h1>
