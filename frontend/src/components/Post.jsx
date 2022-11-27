@@ -85,7 +85,7 @@ const Post = ({ post: initialPost, deletePost }) => {
 			console.log(response.data);
 		})
 		.catch(function (error) {
-			window.alert("ERROR CREATING NEW POST NEWSFEED PAGE:", error);
+			window.alert("ERROR UPDATING NEW POST NEWSFEED PAGE:", error);
 			console.log(error);
 			imagePreview && URL.revokeObjectURL(imagePreview);
 			setImagePreview(null);

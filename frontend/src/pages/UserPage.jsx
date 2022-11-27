@@ -64,7 +64,7 @@ const UserPage = (props) => {
 	const handleUpdateProfile = async (event) => {
 		event.preventDefault();
 		event.stopPropagation();
-		let updateUser = { ...user };
+		let updateUser = {};
 		let imageUpdate = new FormData();
 		try {
 			if (updateSection === ABOUT) {
@@ -97,10 +97,14 @@ const UserPage = (props) => {
 			if (imagePreview) URL.revokeObjectURL(imagePreview);
 			setFile(null);
 			setImagePreview(null);
-			context.modifyCurrentUser(updateUser);
-			console.log('Updated User Profile!');
+			context.modifyCurrentUser(updateUser.data);
+
+			console.log('Updated User Profile!', updateUser.data);
 		} catch (err) {
 			window.alert('ERROR updating user failed');
+			if (imagePreview) URL.revokeObjectURL(imagePreview);
+			setFile(null);
+			setImagePreview(null);
 			console.log(err);
 		}
 	};

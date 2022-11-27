@@ -1,12 +1,12 @@
 import React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import { msToDuration } from '../utilities/Helpers';
+import { getCookie, msToDuration } from '../utilities/Helpers';
 import './Badge.css';
 import { InfoContext } from './InfoProvider';
 import { useHistory } from 'react-router-dom';
 
 const DEFAULT_PROFILE_IMG = process.env.REACT_APP_DEFAULT_ICON;
-
+let cookie = getCookie('userId');
 const Bagde = ({ post }) => {
 	const history = useHistory();
 	const context = useContext(InfoContext);
@@ -16,9 +16,11 @@ const Bagde = ({ post }) => {
 	useEffect(() => {
 		setPostDuration(submitDuration(post.createdAt));
 		//TODO: call GET /:userID instead
-		const tempUser = context.users.find((user) => user._id === post.user_id);
+		let tempUser;
+		if (cookie === post.user_id) tempUser = context.currentUser;
+		else tempUser = context.users.find((user) => user._id === post.user_id);
 		setUser(tempUser);
-	}, [JSON.stringify(context.currentUser) === '{}']);
+	}, [context.currentUser]);
 
 	const submitDuration = (submittedTime) => {
 		//Temp

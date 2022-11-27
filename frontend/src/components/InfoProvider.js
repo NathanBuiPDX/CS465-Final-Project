@@ -9,7 +9,7 @@ const InfoProvider = ({ children }) => {
 	const [likes, setLikes] = useState([]);
 	const [posts, setPosts] = useState([]);
 	const [comments, setComments] = useState([]);
-	const [users, setUser] = useState([]);
+	const [users, setUsers] = useState([]);
 	const [currentUser, setCurrentUser] = useState({});
 	const [recentlySearch, setRecentlySearch] = useState([]);
 
@@ -21,7 +21,7 @@ const InfoProvider = ({ children }) => {
 			axios
 			.get("http://localhost:8800/api/users/all",  { withCredentials:true})
 			.then(function (response) {
-				setUser(response.data);
+				setUsers(response.data);
 				console.log("Fetching users from context: ", response.data);
 			})
 			.catch(function (error) {
@@ -55,10 +55,13 @@ const InfoProvider = ({ children }) => {
 
 	const modifyCurrentUser = (currentUser) => {
 		console.log("Modifying Current User: ", currentUser);
+		let usersArray = [...users];
 		setCurrentUser(currentUser);
-
-
-		
+		let currentUserIdx = usersArray.findIndex(user => user._id === cookie);
+		if (currentUserIdx > -1) {
+			usersArray[currentUserIdx] = currentUser;
+			setUsers(usersArray);
+		}
 	};
 
 	return (

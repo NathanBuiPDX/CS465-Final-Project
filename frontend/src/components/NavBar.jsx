@@ -13,14 +13,15 @@ const NavBar = () => {
 	const context = useContext(InfoContext);
 	const [user, setUser] = useState(context.currentUser);
 	const [recentlySearch, setRecentlySearch] = useState([]);
-	
+	const [users, setUsers] = useState([]);
 	useEffect(() => {
 		setUser(context.currentUser);
 	}, [context.currentUser]);
 
 	useEffect(() => {
 		setRecentlySearch(context.users);
-	}, [context.users]);
+		setUsers(context.users);
+	}, [context.currentUser]);
 
 
 
@@ -32,6 +33,16 @@ const NavBar = () => {
 			window.alert('ERROR: ', err.message);
 		}
 	};
+
+	const handleSearchChange = (event) => {
+		event.preventDefault();
+		let usersArray = [...users];
+		let keyword = event.target.value;
+		if (keyword !== '') {
+			const result = usersArray.filter(user => user.full_name.toLowerCase().startsWith(keyword.toLowerCase()));
+			setRecentlySearch(result);
+		} else setRecentlySearch(usersArray);
+	}
 
 	const handleLogout = (event) => {
 		console.log("Logging out");
@@ -58,6 +69,7 @@ const NavBar = () => {
 						className="searchInput"
 						data-bs-toggle="dropdown"
 						aria-expanded="false"
+						onChange={handleSearchChange}
 					/>
 					<ul className="dropdown-menu mt-2 widthAdjustment bg-light">
 						{recentlySearch.map((e) => (
