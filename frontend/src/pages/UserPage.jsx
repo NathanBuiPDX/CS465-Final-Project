@@ -71,7 +71,7 @@ const UserPage = (props) => {
 				updateUser.name = nameRef.current.value;
 				updateUser.full_name = fullNameRef.current.value;
 				if (genderRef.current.value !== "none") updateUser.gender = genderRef.current.value;
-				updateUser.dob = dobRef.current.value;
+				if (dobRef.current.value) updateUser.dob = dobRef.current.value;
 				updateUser.about = aboutRef.current.value;
 				console.log('UPDATING USER INFO: ', updateUser);
 				updateUser = await axios.put(
@@ -379,13 +379,16 @@ const UserPage = (props) => {
 													onChange={handleImageUpdate}
 												/>
 											</div>
-											{!imagePreview && (user.icon_url || user.cover_url) && (
+											{!imagePreview && user.icon_url && (
 												<img
-													src={
-														updateSection === PROFILE_IMAGE
-															? user.icon_url
-															: user.cover_url
-													}
+													src={user.icon_url}
+													className="imageModal"
+													alt="initial imgUpdate section"
+												/>
+											)}
+											{!imagePreview &&  user.cover_url && (
+												<img
+													src={user.cover_url}
 													className="imageModal"
 													alt="initial imgUpdate section"
 												/>
