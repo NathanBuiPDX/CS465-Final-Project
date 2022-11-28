@@ -24,13 +24,13 @@ router.put("/cover_image", async (req, res) => {
     const cookies = cookie.fetchCookies(req);
     if (cookies["userId"]) {
       const mongoId = cookies["userId"];
-      //query user inside mongoDB
+      // query user inside mongoDB
 
       const user = await User.findById({ _id: mongoId });
       console.log(user);
-      //delete old cover image
+      // delete old cover image
 
-      //set the new cover image with s3 returned url (same logic as post instead of user.image_url it will user.cover_url)
+      // set the new cover image with s3 returned url (same logic as post instead of user.image_url it will user.cover_url)
       const pic = req?.file?.buffer;
       console.log("CoverFILE: ", pic);
       // post image to S3BUCKET if the user did include an image
@@ -50,40 +50,41 @@ router.put("/cover_image", async (req, res) => {
     console.log(error);
   }
 });
-//use s3
+
+// use s3
 router.put("/profile_image", async (req, res) => {
-    try {
-      const cookies = cookie.fetchCookies(req);
-      if (cookies["userId"]) {
-        const mongoId = cookies["userId"];
-        //query user inside mongoDB
+  try {
+    const cookies = cookie.fetchCookies(req);
+    if (cookies["userId"]) {
+      const mongoId = cookies["userId"];
+      // query user inside mongoDB
 
-        const user = await User.findById({ _id: mongoId });
-        console.log(user);
-        //delete old cover image
+      const user = await User.findById({ _id: mongoId });
+      console.log(user);
+      // delete old cover image
 
-        //set the new cover image with s3 returned url (same logic as post instead of user.image_url it will user.cover_url)
-        const pic = req?.file?.buffer;
-        console.log("ICON_FILE: ", pic);
-        // post image to S3BUCKET if the user did include an image
-        if (pic) {
-          var s3Object = await s3Function.setImage(pic);
+      // set the new cover image with s3 returned url (same logic as post instead of user.image_url it will user.cover_url)
+      const pic = req?.file?.buffer;
+      console.log("ICON_FILE: ", pic);
+      // post image to S3BUCKET if the user did include an image
+      if (pic) {
+        var s3Object = await s3Function.setImage(pic);
 
-          // so we can store our s3Unique key in our DB
-          user.icon_url = s3Object.key;
-          await User.findByIdAndUpdate({ _id: mongoId }, { $set: user });
-          user.icon_url = s3Object.url;
-          if (user.cover_url) user.cover_url = await s3Function.getImage(user.cover_url);
-          res.status(200).json(user);
-        }
+        // so we can store our s3Unique key in our DB
+        user.icon_url = s3Object.key;
+        await User.findByIdAndUpdate({ _id: mongoId }, { $set: user });
+        user.icon_url = s3Object.url;
+        if (user.cover_url) user.cover_url = await s3Function.getImage(user.cover_url);
+        res.status(200).json(user);
       }
-      res.end();
-    } catch (error) {
-      console.log(error);
     }
+    res.end();
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-//this route is only for text updating
+// this route is only for text updating
 // UPDATE CURRENT USER
 router.put("/", async (req, res) => {
   if (req.body.gender && !User.schema.path("gender").enumValues.includes(req.body.gender)) {
@@ -121,13 +122,13 @@ router.put("/", async (req, res) => {
 });
 
 // GET ALL USERS
-//s3
+// s3
 router.get("/all", async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
     if (cookies["userId"]) {
       try {
-        const userList = await User.find({});
+        const userList = await User.find({}, { password: 0 });
         // const results = userList.filter(user => user._id.toString() !== cookies['userId']);
         // if (!results) {
         //     res.status(404).json(`No other users except you`);
@@ -159,7 +160,7 @@ router.get("/all", async (req, res) => {
 });
 
 // GET ANOTHER USER
-//s3
+// s3
 router.get("/:userId", async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
@@ -174,11 +175,11 @@ router.get("/:userId", async (req, res) => {
         }
         // eslint-disable-next-line no-unused-vars
         const { password, createdAt, updatedAt, __v, ...other } = user._doc;
-        if (other.cover_url){
+        if (other.cover_url) {
           other.cover_url = await s3Function.getImage(other.cover_url);
         }
-        if(other.icon_url){
-        other.icon_url = await s3Function.getImage(other.icon_url);
+        if (other.icon_url) {
+          other.icon_url = await s3Function.getImage(other.icon_url);
         }
         res.status(200).json(other);
       } catch (err) {
@@ -193,7 +194,7 @@ router.get("/:userId", async (req, res) => {
 });
 
 // GET CURRENT USER
-//s3
+// s3
 router.get("/", async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);

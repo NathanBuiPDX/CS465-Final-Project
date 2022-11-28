@@ -26,17 +26,15 @@ router.post("/", async (req, res) => {
       // eslint-disable-next-line no-unused-vars
       const { __v, ...other } = post._doc;
 
-      //if the pic is included, then extract the s3 URL and save it to image_url
+      // if the pic is included, then extract the s3 URL and save it to image_url
       // store s3URL to frontEnd because we want to store the key in DB
       // must check if picture is included in request
       if (pic) {
         const s3pic = s3Object.url;
         other.image_url = s3pic;
       }
-      //check if post objects ahve imageURl inside, if yes, call s3 function
-      //getSignedURL from s3, res.status(200).json(other);
-      //
-
+      // check if post objects ahve imageURl inside, if yes, call s3 function
+      // getSignedURL from s3, res.status(200).json(other);
       res.status(200).json(other);
     } else {
       res.status(403).json("Unauthorized user");
@@ -78,11 +76,11 @@ router.put("/:postId", async (req, res) => {
       }
       // eslint-disable-next-line no-unused-vars
       const { __v, ...other } = post._doc;
-      //return s3URL to frontEnd
-            if (pic || other.image_url) {
-              const s3pic = await s3Function.getImage(other.image_url);
-              other.image_url = s3pic;
-            }
+      // return s3URL to frontEnd
+      if (pic || other.image_url) {
+        const s3pic = await s3Function.getImage(other.image_url);
+        other.image_url = s3pic;
+      }
 
       res.status(200).json(other);
     } else {
@@ -165,14 +163,14 @@ router.get("/users/:userId", async (req, res) => {
         res.status(200).json(`No Post found`);
         return;
       }
-     await Promise.all(
-       postList.map(async (post) => {
-         if (post.image_url) {
-           post.image_url = await s3Function.getImage(post.image_url);
-           console.log("getting images  ", post.image_url);
-         }
-       })
-     );
+      await Promise.all(
+        postList.map(async (post) => {
+          if (post.image_url) {
+            post.image_url = await s3Function.getImage(post.image_url);
+            console.log("getting images  ", post.image_url);
+          }
+        })
+      );
       res.status(200).json(postList);
     } else {
       res.status(403).json("Unauthorized user");
@@ -193,7 +191,7 @@ router.get("/:postId", async (req, res) => {
         res.status(404).json(`Post not found`);
         return;
       }
-      
+
       // eslint-disable-next-line no-unused-vars
       const { __v, ...other } = post._doc;
       res.status(200).json(other);
