@@ -1,9 +1,9 @@
-const router = require("express").Router();
-const User = require("../models/User");
-const bcrypt = require("bcrypt");
-const cookie = require("./cookie");
+const router = require('express').Router();
+const User = require('../models/User');
+const bcrypt = require('bcrypt');
+const cookie = require('./cookie');
 
-const s3Function = require("../s3helper/bucket");
+const s3Function = require('../s3helper/bucket');
 
 const options = {
   year: 'numeric',
@@ -12,11 +12,11 @@ const options = {
 };
 
 // s3 for put profile image or coverImage
-router.put("/cover_image", async (req, res) => {
+router.put('/cover_image', async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
-    if (cookies["userId"]) {
-      const mongoId = cookies["userId"];
+    if (cookies['userId']) {
+      const mongoId = cookies['userId'];
       // query user inside mongoDB
 
       const user = await User.findById({ _id: mongoId });
@@ -25,7 +25,7 @@ router.put("/cover_image", async (req, res) => {
 
       // set the new cover image with s3 returned url (same logic as post instead of user.image_url it will user.cover_url)
       const pic = req?.file?.buffer;
-      console.log("CoverFILE: ", pic);
+      console.log('CoverFILE: ', pic);
       // post image to S3BUCKET if the user did include an image
       if (pic) {
         var s3Object = await s3Function.setImage(pic);
@@ -45,11 +45,11 @@ router.put("/cover_image", async (req, res) => {
 });
 
 // use s3
-router.put("/profile_image", async (req, res) => {
+router.put('/profile_image', async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
-    if (cookies["userId"]) {
-      const mongoId = cookies["userId"];
+    if (cookies['userId']) {
+      const mongoId = cookies['userId'];
       // query user inside mongoDB
 
       const user = await User.findById({ _id: mongoId });
@@ -58,7 +58,7 @@ router.put("/profile_image", async (req, res) => {
 
       // set the new cover image with s3 returned url (same logic as post instead of user.image_url it will user.cover_url)
       const pic = req?.file?.buffer;
-      console.log("ICON_FILE: ", pic);
+      console.log('ICON_FILE: ', pic);
       // post image to S3BUCKET if the user did include an image
       if (pic) {
         var s3Object = await s3Function.setImage(pic);
@@ -79,13 +79,13 @@ router.put("/profile_image", async (req, res) => {
 
 // this route is only for text updating
 // UPDATE CURRENT USER
-router.put("/", async (req, res) => {
-  if (req.body.gender && !User.schema.path("gender").enumValues.includes(req.body.gender)) {
-    res.status(400).json("Gender values must be in male, female, other").end();
+router.put('/', async (req, res) => {
+  if (req.body.gender && !User.schema.path('gender').enumValues.includes(req.body.gender)) {
+    res.status(400).json('Gender values must be in male, female, other').end();
   }
   try {
     const cookies = cookie.fetchCookies(req);
-    if (cookies["userId"]) {
+    if (cookies['userId']) {
       if (req.body.password) {
         try {
           req.body.password = await generateHashedPwd(req.body.password);
@@ -95,7 +95,7 @@ router.put("/", async (req, res) => {
         }
       }
       try {
-        const mongoId = cookies["userId"];
+        const mongoId = cookies['userId'];
         await User.findByIdAndUpdate({ _id: mongoId }, { $set: req.body });
         const user = await User.findById({ _id: mongoId });
         // eslint-disable-next-line no-unused-vars
@@ -109,7 +109,7 @@ router.put("/", async (req, res) => {
         res.status(500).json(err);
       }
     } else {
-      res.status(403).json("Unauthorized user");
+      res.status(403).json('Unauthorized user');
     }
   } catch (error) {
     res.status(500).json(error);
@@ -118,10 +118,10 @@ router.put("/", async (req, res) => {
 
 // GET ALL USERS
 // s3
-router.get("/all", async (req, res) => {
+router.get('/all', async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
-    if (cookies["userId"]) {
+    if (cookies['userId']) {
       try {
         const userList = await User.find({}, { password: 0 });
         // const results = userList.filter(user => user._id.toString() !== cookies['userId']);
@@ -133,11 +133,11 @@ router.get("/all", async (req, res) => {
           userList.map(async (user) => {
             if (user.icon_url) {
               user.icon_url = await s3Function.getImage(user.icon_url);
-              console.log("getting images  ", user.icon_url);
+              console.log('getting images  ', user.icon_url);
             }
             if (user.cover_url) {
               user.cover_url = await s3Function.getImage(user.cover_url);
-              console.log("getting images  ", user.cover_url);
+              console.log('getting images  ', user.cover_url);
             }
           })
 
@@ -147,7 +147,7 @@ router.get("/all", async (req, res) => {
         res.status(500).json(err);
       }
     } else {
-      res.status(403).json("Unauthorized user");
+      res.status(403).json('Unauthorized user');
     }
   } catch (error) {
     res.status(500).json(error);
@@ -156,10 +156,10 @@ router.get("/all", async (req, res) => {
 
 // GET ANOTHER USER
 // s3
-router.get("/:userId", async (req, res) => {
+router.get('/:userId', async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
-    if (cookies["userId"]) {
+    if (cookies['userId']) {
       try {
         const userId = req.params.userId;
         // const user = await User.findOne({ username: username });
@@ -181,7 +181,7 @@ router.get("/:userId", async (req, res) => {
         res.status(500).json(err);
       }
     } else {
-      res.status(403).json("Unauthorized user");
+      res.status(403).json('Unauthorized user');
     }
   } catch (error) {
     res.status(500).json(error);
@@ -190,12 +190,12 @@ router.get("/:userId", async (req, res) => {
 
 // GET CURRENT USER
 // s3
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
-    if (cookies["userId"]) {
+    if (cookies['userId']) {
       try {
-        const mongoId = cookies["userId"];
+        const mongoId = cookies['userId'];
         const user = await User.findById({ _id: mongoId });
         // eslint-disable-next-line no-unused-vars
         const { password, createdAt, updatedAt, __v, ...other } = user._doc;
@@ -210,7 +210,7 @@ router.get("/", async (req, res) => {
         res.status(500).json(err);
       }
     } else {
-      res.status(403).json("Unauthorized user");
+      res.status(403).json('Unauthorized user');
     }
   } catch (error) {
     res.status(500).json(error);
@@ -218,20 +218,20 @@ router.get("/", async (req, res) => {
 });
 
 // DELETE CURRENT USER
-router.delete("/", async (req, res) => {
+router.delete('/', async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
-    if (cookies["userId"]) {
+    if (cookies['userId']) {
       try {
-        const mongoId = cookies["userId"];
+        const mongoId = cookies['userId'];
         await User.deleteOne({ _id: mongoId });
-        res.clearCookie("userId");
-        res.status(200).json("Account has been deleted");
+        res.clearCookie('userId');
+        res.status(200).json('Account has been deleted');
       } catch (err) {
         res.status(500).json(err);
       }
     } else {
-      res.status(403).json("Unauthorized user");
+      res.status(403).json('Unauthorized user');
     }
   } catch (error) {
     res.status(500).json(error);

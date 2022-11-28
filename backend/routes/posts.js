@@ -1,15 +1,15 @@
-const router = require("express").Router();
-const Post = require("../models/Post");
-const cookie = require("./cookie");
+const router = require('express').Router();
+const Post = require('../models/Post');
+const cookie = require('./cookie');
 // multer takes the image data and stores it in memory
 
-const s3Function = require("../s3helper/bucket");
+const s3Function = require('../s3helper/bucket');
 // WRITE A NEW POST BY CURRENT USE
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
-    if (cookies["userId"]) {
-      req.body.user_id = cookies["userId"];
+    if (cookies['userId']) {
+      req.body.user_id = cookies['userId'];
       // AWS S3 LOGIC
       // req.file.buffer is our image that we send to S3
       const pic = req?.file?.buffer;
@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
       // getSignedURL from s3, res.status(200).json(other);
       res.status(200).json(other);
     } else {
-      res.status(403).json("Unauthorized user");
+      res.status(403).json('Unauthorized user');
     }
   } catch (error) {
     res.status(500).json(error);
@@ -46,11 +46,11 @@ router.post("/", async (req, res) => {
 });
 
 // UPDATE A POST BY CURRENT USER
-router.put("/:postId", async (req, res) => {
+router.put('/:postId', async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
     const postId = req.params.postId;
-    if (cookies["userId"]) {
+    if (cookies['userId']) {
       let post = await Post.findById(postId);
       if (!post) {
         res.status(404).json(`Post not found`);
@@ -84,7 +84,7 @@ router.put("/:postId", async (req, res) => {
 
       res.status(200).json(other);
     } else {
-      res.status(403).json("Unauthorized user");
+      res.status(403).json('Unauthorized user');
     }
   } catch (error) {
     res.status(500).json(error);
@@ -93,10 +93,10 @@ router.put("/:postId", async (req, res) => {
 });
 
 // GET ALL POST OF ALL USER
-router.get("/all", async (req, res) => {
+router.get('/all', async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
-    if (cookies["userId"]) {
+    if (cookies['userId']) {
       const postList = await Post.find({}).sort({ updatedAt: -1 });
       if (!postList) {
         res.status(200).json(`No Post found`);
@@ -107,14 +107,14 @@ router.get("/all", async (req, res) => {
         postList.map(async (post) => {
           if (post.image_url) {
             post.image_url = await s3Function.getImage(post.image_url);
-            console.log("getting images  ", post.image_url);
+            console.log('getting images  ', post.image_url);
           }
         })
       );
       console.log(postList);
       res.status(200).json(postList);
     } else {
-      res.status(403).json("Unauthorized user");
+      res.status(403).json('Unauthorized user');
     }
   } catch (error) {
     res.status(500).json(error);
@@ -122,11 +122,11 @@ router.get("/all", async (req, res) => {
 });
 
 // GET ALL POST OF CURRENT USER
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
-    if (cookies["userId"]) {
-      const postList = await Post.find({ user_id: cookies["userId"] }).sort({
+    if (cookies['userId']) {
+      const postList = await Post.find({ user_id: cookies['userId'] }).sort({
         updatedAt: -1,
       });
       if (!postList) {
@@ -137,13 +137,13 @@ router.get("/", async (req, res) => {
         postList.map(async (post) => {
           if (post.image_url) {
             post.image_url = await s3Function.getImage(post.image_url);
-            console.log("getting images  ", post.image_url);
+            console.log('getting images  ', post.image_url);
           }
         })
       );
       res.status(200).json(postList);
     } else {
-      res.status(403).json("Unauthorized user");
+      res.status(403).json('Unauthorized user');
     }
   } catch (error) {
     res.status(500).json(error);
@@ -151,11 +151,11 @@ router.get("/", async (req, res) => {
 });
 
 // GET ALL POST OF ANOTHER USER
-router.get("/users/:userId", async (req, res) => {
+router.get('/users/:userId', async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
     const userId = req.params.userId;
-    if (cookies["userId"]) {
+    if (cookies['userId']) {
       const postList = await Post.find({ user_id: userId }, { __v: 0 }).sort({
         updatedAt: -1,
       });
@@ -167,13 +167,13 @@ router.get("/users/:userId", async (req, res) => {
         postList.map(async (post) => {
           if (post.image_url) {
             post.image_url = await s3Function.getImage(post.image_url);
-            console.log("getting images  ", post.image_url);
+            console.log('getting images  ', post.image_url);
           }
         })
       );
       res.status(200).json(postList);
     } else {
-      res.status(403).json("Unauthorized user");
+      res.status(403).json('Unauthorized user');
     }
   } catch (error) {
     res.status(500).json(error);
@@ -181,11 +181,11 @@ router.get("/users/:userId", async (req, res) => {
 });
 
 // GET A POST BY POSTID
-router.get("/:postId", async (req, res) => {
+router.get('/:postId', async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
     const postId = req.params.postId;
-    if (cookies["userId"]) {
+    if (cookies['userId']) {
       const post = await Post.findById(postId);
       if (!post) {
         res.status(404).json(`Post not found`);
@@ -196,7 +196,7 @@ router.get("/:postId", async (req, res) => {
       const { __v, ...other } = post._doc;
       res.status(200).json(other);
     } else {
-      res.status(403).json("Unauthorized user");
+      res.status(403).json('Unauthorized user');
     }
   } catch (error) {
     res.status(500).json(error);
@@ -204,11 +204,11 @@ router.get("/:postId", async (req, res) => {
 });
 
 // DELETE A POST
-router.delete("/:postId", async (req, res) => {
+router.delete('/:postId', async (req, res) => {
   try {
     const cookies = cookie.fetchCookies(req);
     const postId = req.params.postId;
-    if (cookies["userId"]) {
+    if (cookies['userId']) {
       // delete image from S3 bucket first
       const post = await Post.findById(postId);
       console.log(post.image_url);
@@ -216,9 +216,9 @@ router.delete("/:postId", async (req, res) => {
       // console.log(deleted);
       await Post.findByIdAndDelete(postId);
 
-      res.status(200).json("Post deleted");
+      res.status(200).json('Post deleted');
     } else {
-      res.status(403).json("Unauthorized user");
+      res.status(403).json('Unauthorized user');
     }
   } catch (error) {
     console.log(error);
