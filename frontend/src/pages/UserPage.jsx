@@ -379,14 +379,14 @@ const UserPage = (props) => {
 													onChange={handleImageUpdate}
 												/>
 											</div>
-											{!imagePreview && user.icon_url && (
+											{!imagePreview && user.icon_url && updateSection === PROFILE_IMAGE && (
 												<img
 													src={user.icon_url}
 													className="imageModal"
 													alt="initial imgUpdate section"
 												/>
 											)}
-											{!imagePreview &&  user.cover_url && (
+											{!imagePreview &&  user.cover_url && updateSection === COVER_IMAGE &&(
 												<img
 													src={user.cover_url}
 													className="imageModal"
