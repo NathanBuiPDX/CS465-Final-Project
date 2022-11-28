@@ -347,7 +347,7 @@ const UserPage = (props) => {
 													className="infoInput"
 													name="dob"
 													id="dob"
-													defaultValue={new Date(user.dob)}
+													defaultValue={new Date(user.dob).toLocaleDateString('en-CA')}
 													ref={dobRef}
 												/>
 											</div>
