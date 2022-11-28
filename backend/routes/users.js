@@ -86,7 +86,7 @@ router.put("/profile_image", async (req, res) => {
 //this route is only for text updating
 // UPDATE CURRENT USER
 router.put("/", async (req, res) => {
-  if (!User.schema.path("gender").enumValues.includes(req.body.gender)) {
+  if (req.body.gender && !User.schema.path("gender").enumValues.includes(req.body.gender)) {
     res.status(400).json("Gender values must be in male, female, other").end();
   }
   try {
