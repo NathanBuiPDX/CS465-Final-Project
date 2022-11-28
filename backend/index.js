@@ -11,6 +11,9 @@ const postRoute = require('./routes/posts');
 const commentRoute = require('./routes/comments');
 const likeRoute = require('./routes/likes');
 var cors = require('cors')
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 app.use(cors(
     {
@@ -30,6 +33,7 @@ mongoose.connect(process.env.MONGO_URL
 
 // middleware
 // body parser, on post request parse the request
+app.use(upload.single('imageFile'));
 app.use(express.json());
 app.use(helmet());
 app.use(morgan('common'));

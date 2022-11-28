@@ -35,9 +35,13 @@ const UserSchema = new mongoose.Schema({
     },
     gender: {
         type: String,
-        enum: ['male', 'female', 'other'], // check for given values
+        enum: ['male', 'female', 'other'],
     },
-    date_of_birth: { type: Date },
+    cover_url: {
+        type: String,
+        max: 100,
+    },
+    dob: { type: Date },
     about: {
         type: String,
         max: 150,
