@@ -5,18 +5,11 @@ const cookie = require("./cookie");
 
 const s3Function = require("../s3helper/bucket");
 
-router.post("/other", async (req, res) => {
-  try {
-    const cookies = cookie.fetchCookies(req);
-    if (cookies["user"]) {
-      res.status(200).json("Authorized user");
-    } else {
-      res.status(403).json("Unauthorized user");
-    }
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
+const options = {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+};
 
 // s3 for put profile image or coverImage
 router.put("/cover_image", async (req, res) => {
@@ -109,6 +102,8 @@ router.put("/", async (req, res) => {
         const { password, createdAt, updatedAt, __v, ...other } = user._doc;
         if (other.icon_url) other.icon_url = await s3Function.getImage(other.icon_url);
         if (other.cover_url) other.cover_url = await s3Function.getImage(other.cover_url);
+        if (other.dob)
+          other.dob = other.dob.toLocaleDateString('en-CA', options);
         res.status(200).json(other);
       } catch (err) {
         res.status(500).json(err);
@@ -175,12 +170,12 @@ router.get("/:userId", async (req, res) => {
         }
         // eslint-disable-next-line no-unused-vars
         const { password, createdAt, updatedAt, __v, ...other } = user._doc;
-        if (other.cover_url) {
+        if (other.cover_url)
           other.cover_url = await s3Function.getImage(other.cover_url);
-        }
-        if (other.icon_url) {
+        if (other.icon_url)
           other.icon_url = await s3Function.getImage(other.icon_url);
-        }
+        if (other.dob)
+          other.dob = other.dob.toLocaleDateString('en-CA', options);
         res.status(200).json(other);
       } catch (err) {
         res.status(500).json(err);
@@ -204,12 +199,12 @@ router.get("/", async (req, res) => {
         const user = await User.findById({ _id: mongoId });
         // eslint-disable-next-line no-unused-vars
         const { password, createdAt, updatedAt, __v, ...other } = user._doc;
-        if (other.cover_url) {
+        if (other.cover_url)
           other.cover_url = await s3Function.getImage(other.cover_url);
-        }
-        if (other.icon_url) {
+        if (other.icon_url)
           other.icon_url = await s3Function.getImage(other.icon_url);
-        }
+        if (other.dob)
+          other.dob = other.dob.toLocaleDateString('en-CA', options);
         res.status(200).json(other);
       } catch (err) {
         res.status(500).json(err);
