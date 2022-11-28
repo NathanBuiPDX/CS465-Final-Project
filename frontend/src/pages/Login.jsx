@@ -35,12 +35,12 @@ const Login = () => {
   };
   return (
     <div className="row loginFormContainer">
-      <div>
+      
         <form
           className=" border border-dark rounded login-form"
           onSubmit={handleFormLogin}
         >
-          <h1 className="mb-2 login-header">
+          <h1 className="mb-3">
             <strong>Login</strong>
           </h1>
           <div className="form-group">
@@ -63,7 +63,7 @@ const Login = () => {
               <b>Password *</b>{" "}
             </label>
             <input
-              type="text"
+              type="password"
               className="form-control col-lg-12"
               id="password"
               name="password"
@@ -88,12 +88,12 @@ const Login = () => {
                 onClick={handleFormRegister}
                 className="btn btn-primary btn-block"
               >
-                Back to Registration Page
+                Register
               </button>
             </div>
           </div>
         </form>
-      </div>
+      
     </div>
   );
 };

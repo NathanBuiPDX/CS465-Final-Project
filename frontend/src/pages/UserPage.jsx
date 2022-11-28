@@ -70,7 +70,7 @@ const UserPage = (props) => {
 			if (updateSection === ABOUT) {
 				updateUser.name = nameRef.current.value;
 				updateUser.full_name = fullNameRef.current.value;
-				updateUser.gender = genderRef.current.value;
+				if (genderRef.current.value !== "none") updateUser.gender = genderRef.current.value;
 				updateUser.dob = dobRef.current.value;
 				updateUser.about = aboutRef.current.value;
 				console.log('UPDATING USER INFO: ', updateUser);
@@ -128,9 +128,8 @@ const UserPage = (props) => {
 		axios
 			.post('http://localhost:8800/api/posts', data, { withCredentials: true })
 			.then(function (response) {
-				setUser(response.data);
 				console.log('Fetching users from context: ', response.data);
-				setUserPosts((prevPosts) => [data, ...prevPosts]);
+				setUserPosts((prevPosts) => [response.data, ...prevPosts]);
 			})
 			.catch(function (error) {
 				window.alert('ERROR creating post from userpage: ', error);
@@ -233,7 +232,7 @@ const UserPage = (props) => {
 								<div className="infoData">{user.full_name}</div>
 							</div>
 							<div className="infoRow">
-								<div className="infoLabel">Preffer Name:</div>
+								<div className="infoLabel">Preferred Name:</div>
 								<div className="infoData">{user.name}</div>
 							</div>
 							{user.gender && (
@@ -330,9 +329,10 @@ const UserPage = (props) => {
 													name="gender"
 													id="gender"
 													className="infoInput"
-													defaultValue={user.gender}
+													defaultValue={user.gender || "none"}
 													ref={genderRef}
 												>
+													<option value="none">none</option>	
 													<option value="male">male</option>
 													<option value="female">female</option>
 													<option value="other">other</option>

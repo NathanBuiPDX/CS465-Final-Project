@@ -18,6 +18,8 @@ const Register = () => {
   const aboutMeRef = useRef("");
   const [imagePreview, setImagePreview] = useState(null);
 
+  
+
   const handleImageUpload = (event) => {
     event.preventDefault();
     try {
@@ -38,11 +40,10 @@ const Register = () => {
     console.log("FullName: ", fullNameRef.current.value);
     console.log("Email ", emailAddressRef.current.value);
     console.log("Img", imgRef.current.value);
-    console.log("maleCheckBox", maleCheckBoxRef.current.checked);
-    console.log("femaleCheckBox", femaleCheckBoxRef.current.checked);
-    console.log("otherCheckBox", otherCheckBoxRef.current.checked);
+    
     console.log("aboutMe", aboutMeRef.current.value);
     event.preventDefault();
+    
 
     let newUser = new FormData();
     newUser.append("username", usernameRef.current.value);
@@ -51,12 +52,11 @@ const Register = () => {
     newUser.append("full_name", fullNameRef.current.value);
     if (emailAddressRef.current.value)
       newUser.append("email", emailAddressRef.current.value);
-    if (profileFile) newUser.append("imageFile", profileFile);
-
-    if (aboutMeRef.current.value) newUser.append(aboutMeRef.current.value);
+    if (aboutMeRef.current.value) newUser.append("about", aboutMeRef.current.value);
+    history.push("/Login");
 
     axios
-      .post("http://localhost:8800/api/auth/register", newUser
+      .post("http://localhost:8800/api/auth/register", newUser,
       )
       .then(function (response) {
         console.log(response);
@@ -65,11 +65,13 @@ const Register = () => {
         window.alert("unable to register");
         console.log(error);
       });
+      
   };
   const handleFormLogin = (event) => {
     event.preventDefault();
     history.push("/Login");
   };
+  
   return (
     <div className="row justify-content-center align-items-center formContainer">
       <div>
@@ -77,13 +79,14 @@ const Register = () => {
           className="border border-dark rounded"
           onSubmit={handleFormRegister}
         >
-          <h1 className="mb-2">
-            <strong>REGISTER</strong>
+          <h1 className="mb-3 ">
+            <strong>SocialApp</strong>
           </h1>
+          <h4>Register</h4>
           <div className="form-group">
             <label htmlFor="userName">
               {" "}
-              <b>UserName *</b>{" "}
+              <b>Username *</b>{" "}
             </label>
             <input
               type="text"
@@ -93,6 +96,7 @@ const Register = () => {
               required
               ref={usernameRef}
             />
+            <br />
           </div>
           <div className="form-group">
             <label htmlFor="password">
@@ -107,6 +111,7 @@ const Register = () => {
               required
               ref={passwordRef}
             />
+            <br />
           </div>
           <div className="form-group">
             <label htmlFor="prefName">
@@ -122,11 +127,12 @@ const Register = () => {
               ref={prefNameRef}
             />
           </div>
+          <br />
 
           <div className="form-group">
             <label htmlFor="fullName">
               {" "}
-              <b>Name *</b>{" "}
+              <b>Full Name *</b>{" "}
             </label>
             <input
               type="text"
@@ -136,6 +142,7 @@ const Register = () => {
               required
               ref={fullNameRef}
             />
+            <br />
           </div>
           <div className="form-group">
             <label htmlFor="emailAddress">
@@ -149,65 +156,11 @@ const Register = () => {
               ref={emailAddressRef}
             />
           </div>
-          <div
-            className="form-group"
-            action="/upload"
-            method="POST"
-            encType="multipart/form-data"
-          >
-            <label htmlFor="img">
-              <b>Upload a pic </b>
-            </label>
-            <input type="file" id="picture" name="picture" ref={imgRef} />
-            <button type="submit">Upload</button>
-            <img src="url" alt=" " name="pic" />
-          </div>
-          <div className="form-group form-check">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="maleCheckBox"
-              name="maleCheckBox"
-              ref={maleCheckBoxRef}
-            />
-            <label className="form-check-label" htmlFor="checkBox">
-              {" "}
-              <b>Male</b>
-            </label>
-            <br />
-          </div>
-          <div className="form-group form-check">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="femaleCheckBox"
-              name="femaleCheckBox"
-              ref={femaleCheckBoxRef}
-            />
-            <label className="form-check-label" htmlFor="checkBox">
-              {" "}
-              <b>Female</b>
-            </label>
-            <br />
-          </div>
-          <div className="form-group form-check">
-            <input
-              className="form-check-input"
-              type="checkBox"
-              id="otherCheckBox"
-              name="otherCheckBox"
-              ref={otherCheckBoxRef}
-            />
-            <label className="form-check-label" htmlFor="otherCheckBox">
-              {" "}
-              <b>Other</b>
-            </label>
-            <br />
-          </div>
+          <br />
 
           <div className="form-group">
             <label htmlFor="aboutMe">
-              <b>AboutMe</b>{" "}
+              <b>About Me</b>{" "}
             </label>
 
             <input
@@ -235,7 +188,7 @@ const Register = () => {
                 onClick={handleFormLogin}
                 className="btn btn-primary btn-block"
               >
-                Back To Login Page
+                Login Page
               </button>
             </div>
           </div>
