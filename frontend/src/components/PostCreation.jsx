@@ -34,32 +34,32 @@ const PostCreation = ({submitPost}) => {
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
 
-		setIsUpdating(true);
-		console.log('Form Submitted with content: ', content.current.value);
-		try {
-			let newPost = new FormData();
-			newPost.append('user_id', currentUser._id);
-			newPost.append('caption', content.current.value);
-			newPost.append('like_count', 0);
-			newPost.append('comments_count', 0);
-
-			if (file) newPost.append('imageFile', file);
-			submitPost(newPost);
-			setFile(null);
-			setIsUpdating(false);
-			content.current.value = '';
-			setImagePreview(null);
-		} catch (err) {
-			window.alert('Can not Post a new post!');
-			console.log(err);
-			setFile(null);
-			setIsUpdating(false);
-			content.current.value = '';
-			setImagePreview(null);
-		}
-		URL.revokeObjectURL(imagePreview);
+		if (!file && !content.current.value) window.alert("Can not create an empty post!");
+		else{
+			setIsUpdating(true);
+			try {
+				let newPost = new FormData();
+				newPost.append('user_id', currentUser._id);
+				newPost.append('caption', content.current.value);
+				newPost.append('like_count', 0);
+				newPost.append('comments_count', 0);
 	
-		
+				if (file) newPost.append('imageFile', file);
+				submitPost(newPost);
+				setFile(null);
+				setIsUpdating(false);
+				content.current.value = '';
+				setImagePreview(null);
+			} catch (err) {
+				window.alert('Can not Post a new post!');
+				console.log(err);
+				setFile(null);
+				setIsUpdating(false);
+				content.current.value = '';
+				setImagePreview(null);
+			}
+			URL.revokeObjectURL(imagePreview);	
+		}	
 	};
 
 	return (
@@ -108,6 +108,8 @@ const PostCreation = ({submitPost}) => {
 							onClick={() => {
 								URL.revokeObjectURL(imagePreview);
 								setImagePreview(null);
+								setFile(null);
+								setIsUpdating(false);
 							}}
 						>
 							Cancel
