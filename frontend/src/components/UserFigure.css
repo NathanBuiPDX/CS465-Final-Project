@@ -1,0 +1,27 @@
+.userFigure {
+	display: flex;
+	align-items: center;
+	margin-right: 20px;
+	cursor: pointer;
+}
+
+.userFigure .userIcon {
+	box-sizing: content-box;
+	display: block;
+	height: 40px;
+	width: 40px;
+	margin-right: 10px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.userFigure .userName {
+	color: white;
+	font-weight: bold;
+	padding-bottom: 3px;
+	margin: 0;
+}
+
+.userFigure .userName:hover {
+	text-decoration: underline;
+}

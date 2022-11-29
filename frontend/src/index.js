@@ -1,12 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import InfoProvider from "./components/InfoProvider";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+ReactDOM.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <InfoProvider>
+      <App />
+    </InfoProvider>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
-

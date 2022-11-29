@@ -1,0 +1,74 @@
+.postCreation {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid rgb(228, 223, 223);
+	padding: 10px;
+	border-radius: 20px;
+	box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+	margin: 15px 0;
+}
+.postCreation .userCaption {
+	display: flex;
+	flex-direction: row;
+	/* justify-content: center; */
+	/* align-items: center; */
+}
+
+.postCreation .caption {
+	width: 100%;
+	border-radius: 10px;
+	height: 80px;
+	padding: 5px 10px;
+	border-color: rgb(160, 156, 156);
+}
+
+.postCreation .caption:focus {
+	outline-color: rgb(211, 208, 208);
+}
+
+.postCreation .userIcon {
+	display: block;
+	object-fit: cover;
+	height: 40px;
+	width: 40px;
+	border-radius: 40px;
+	margin-right: 10px;
+	margin-top: 10px;
+}
+
+.postCreation .uploadFile {
+	display: flex;
+	justify-content: space-around;
+	border-top: 1px solid rgba(181, 180, 180, 0.484);
+	margin-top: 10px;
+	padding-top: 10px;
+}
+
+.postCreation .photoSharing {
+	cursor: pointer;
+}
+
+.postCreation .photoSharing {
+	cursor: pointer;
+}
+
+.postCreation .photoIcon {
+	font-size: 32px;
+	margin-right: 5px;
+	color: rgb(6, 119, 156);
+}
+
+.postCreation .iconLabel {
+	display: inline-block;
+}
+
+.postCreation .iconLabel:hover {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.postCreation .postButton {
+	padding: 5px 30px;
+	font-weight: bold;
+}

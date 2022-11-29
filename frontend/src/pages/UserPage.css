@@ -1,0 +1,143 @@
+.userProfile p {
+    margin:0;
+    padding:0;
+}
+.userProfile {
+    width: 60%;
+    margin: 0 auto;
+    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.114);
+}
+.userProfile .userContent {
+    box-sizing: border-box;
+    padding:12px;
+}
+.userProfile .row {
+    flex-wrap: nowrap;
+    margin-right: 0;
+}
+.userProfile .profileTop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.userProfile .userImages{
+    width: 100%;
+    height: 350px;
+}
+
+.userProfile .coverImg {
+    position: relative;
+    display: block;
+    width: inherit;
+    height: 250px;
+    object-fit: cover;
+    box-shadow: 0 10px 8px -4px rgba(78, 78, 78, 0.459);
+}
+
+.userProfile .profileImg {
+    box-sizing: content-box;
+    display: block;
+    position: relative;
+    left: calc(50% - 90px);
+    bottom:90px;
+    width: 160px;
+    height: 160px;
+    border-radius: 100%;
+    border: 5px solid white;
+    background-color: white;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    object-fit: cover;
+}
+
+.userProfile .userNameSection {
+    text-align: center;
+    font-size: 20px;
+
+}
+.userProfile .userNameSection::first-line {
+    font-weight: bold;
+    font-size: larger;
+}
+
+.userProfile .userInfo {
+    position: sticky;
+    top: 70px;
+    border: 1px solid rgb(228, 223, 223);
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    margin-top: 15px;
+    margin-left:12px;
+    border-radius: 20px;
+    height: fit-content;
+    padding: 10px 15px 20px 15px;
+}
+
+.userProfile .infoInput {
+    width: 70%;
+    border-radius: 10px;
+    border: 1.5px solid rgba(97, 96, 96, 0.445);
+    padding: 5px;
+}
+
+.userProfile .infoInputAboutMe {
+    width: 97%;
+    margin-top: 10px;
+    border-radius: 10px;
+    height: 120px;
+    border: 1.5px solid rgba(97, 96, 96, 0.445);
+    padding: 5px;
+}
+
+.userProfile .about {
+    text-align: center;
+    font-weight: bold;
+    font-size:larger;
+    padding: 10px;
+    border-bottom: 1.5px solid rgba(96, 95, 95, 0.372);
+    margin-bottom: 10px;
+}
+.userProfile .infoRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+.userProfile .infoLabel {
+    font-weight: bold;
+    width: 120px;
+}
+
+.userProfile .userImages {
+    box-sizing: content-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.userProfile .editButton {
+    position: absolute;
+    right: 10px;
+    top:10px;
+}
+
+.userProfile .editCoverImgButton {
+    position: relative;
+    left:calc(100% - 80px);
+    bottom: 400px;
+
+}
+
+.userProfile .editProfileImgButton {
+    position: relative;
+    left:calc(50%);
+    bottom: 150px;
+}
+
+.userProfile .imageModal{
+    display: block;
+    width: 50%;
+    height: 50%;
+    margin: 10px auto;
+}
