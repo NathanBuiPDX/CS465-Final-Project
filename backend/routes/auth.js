@@ -2,6 +2,7 @@ const router = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
+const s3Function = require('../s3helper/bucket');
 // LOGOUT
 router.post('/logout', async (req, res) => {
     res.clearCookie('userId');
@@ -27,6 +28,8 @@ router.post('/login', async (req, res) => {
         res.cookie('userId', user._id.toString(), { maxAge: 900000 });
         // eslint-disable-next-line no-unused-vars
         const { password, createdAt, updatedAt, __v, ...other } = user._doc;
+        if (other.icon_url) other.icon_url = await s3Function.getImage(other.icon_url);
+        if (other.cover_url) other.cover_url = await s3Function.getImage(other.cover_url);
         res.status(200).json(other);
     } catch (error) {
         res.status(500).json(error);
